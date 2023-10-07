@@ -242,27 +242,9 @@ function getStats()
     stats = true
 end
 
--- function check_health()
---     lua_thread.create(function ()
---         while true do
---             local healthBefore = sampGetPlayerHealth(select(2, sampGetPlayerIdByCharHandle(PLAYER_PED)))
---             wait(10000)
---             local healthAfter = sampGetPlayerHealth(select(2, sampGetPlayerIdByCharHandle(PLAYER_PED)))
---             if healthBefore > healthAfter then
---                 bot:sendMessage{
---                     chat_id = ChatId, 
---                     text = u8('Получено %d урона. Осталось %d единиц здоровья'):format(healthBefore-healthAfter, healthAfter)
---                 }
---             end
---         end
---     end)
--- end
-
 function checkHoursInOrganization()
-    local result = -1;
     sampSendChat('/wbook')
     wbook = true;
-    return result;
 end
 
 function separator(n)
@@ -454,70 +436,51 @@ function sampev.onServerMessage(color, text)
     end
 end
 
--- function sampev.onSendTakeDamage(playerId, damage, weapon, bodypart)
---     local res, id = sampGetPlayerIdByCharHandle(PLAYER_PED)
---     if ini.logs.damageN then
---         if playerId <= 999 and weapon <= 47 and weapon ~= 34 then
---             lua_thread.create(function()
---                 wait(100)
---                 bot:sendMessage{chat_id = ChatId, text = u8('Игрок '..sampGetPlayerNickname(playerId)..'  нанёс вам урон при помощи  '..sampGetGunNameById(weapon)..'.\nОсталось '..sampGetPlayerHealth(id)..' hp.')}
---             end)
---         elseif sampGetGamestate() == 3 then
---         lua_thread.create(function()
---                 wait(100)
---                 bot:sendMessage{chat_id = ChatId, text = u8('Был получен урон.\nОсталось '..sampGetPlayerHealth(id)..' hp.')}
---             end)
---         else
---             return false
---         end
+-- function sampGetGunNameById(arg)
+--     --TODO: переделать
+--     if arg == 0 then return 'кулака'
+--     elseif arg == 1 then return 'кастета'
+--     elseif arg == 2 then return 'клюшки для гольфа'
+--     elseif arg == 3 then return 'полицейской дубинки'
+--     elseif arg == 4 then return 'ножа'
+--     elseif arg == 5 then return 'бейсбольной биты'
+--     elseif arg == 6 then return 'лопаты'
+--     elseif arg == 7 then return 'кия'
+--     elseif arg == 8 then return 'катаны'
+--     elseif arg == 10 or arg == 11 then return 'дилдо'
+--     elseif arg == 12 or arg == 13 then return 'вибратора'
+--     elseif arg == 14 then return 'букета цветов'
+--     elseif arg == 15 then return 'трости'
+--     elseif arg == 16 then return 'гранаты'
+--     elseif arg == 17 then return 'слезоточивого газа'
+--     elseif arg == 18 then return 'коктейля молотова'
+--     elseif arg == 22 then return 'пистолета 9мм'
+--     elseif arg == 23 then return 'пистолета 9мм с глушителем'
+--     elseif arg == 24 then return 'пистолета Desert Eagle'
+--     elseif arg == 25 then return 'дробовика'
+--     elseif arg == 26 then return 'обреза'
+--     elseif arg == 27 then return 'скорострельного дробовика'
+--     elseif arg == 28 then return 'узи'
+--     elseif arg == 29 then return 'MP5'
+--     elseif arg == 30 then return 'автомата Калашникова'
+--     elseif arg == 31 then return 'винтовки М4'
+--     elseif arg == 32 then return 'винтовки Rifle'
+--     elseif arg == 33 then return 'снайперской винтовки'
+--     elseif arg == 35 then return 'РПГ'
+--     elseif arg == 36 then return 'самонаводящейся ракеты'
+--     elseif arg == 37 then return 'огнемёта'
+--     elseif arg == 38 then return 'минигана'
+--     elseif arg == 39 then return 'кулака'
+--     elseif arg == 40 then return 'сумки с тротилом'
+--     elseif arg == 41 then return 'баллончика краски'
+--     elseif arg == 42 then return 'огнетушителя'
+--     elseif arg == 43 then return 'кулака'
+--     elseif arg == 44 then return 'кулака'
+--     elseif arg == 45 then return 'кулака'
+--     elseif arg == 46 then return 'кулака'
+--     else return false
 --     end
 -- end
-
-function sampGetGunNameById(arg)
-    --TODO: переделать
-    if arg == 0 then return 'кулака'
-    elseif arg == 1 then return 'кастета'
-    elseif arg == 2 then return 'клюшки для гольфа'
-    elseif arg == 3 then return 'полицейской дубинки'
-    elseif arg == 4 then return 'ножа'
-    elseif arg == 5 then return 'бейсбольной биты'
-    elseif arg == 6 then return 'лопаты'
-    elseif arg == 7 then return 'кия'
-    elseif arg == 8 then return 'катаны'
-    elseif arg == 10 or arg == 11 then return 'дилдо'
-    elseif arg == 12 or arg == 13 then return 'вибратора'
-    elseif arg == 14 then return 'букета цветов'
-    elseif arg == 15 then return 'трости'
-    elseif arg == 16 then return 'гранаты'
-    elseif arg == 17 then return 'слезоточивого газа'
-    elseif arg == 18 then return 'коктейля молотова'
-    elseif arg == 22 then return 'пистолета 9мм'
-    elseif arg == 23 then return 'пистолета 9мм с глушителем'
-    elseif arg == 24 then return 'пистолета Desert Eagle'
-    elseif arg == 25 then return 'дробовика'
-    elseif arg == 26 then return 'обреза'
-    elseif arg == 27 then return 'скорострельного дробовика'
-    elseif arg == 28 then return 'узи'
-    elseif arg == 29 then return 'MP5'
-    elseif arg == 30 then return 'автомата Калашникова'
-    elseif arg == 31 then return 'винтовки М4'
-    elseif arg == 32 then return 'винтовки Rifle'
-    elseif arg == 33 then return 'снайперской винтовки'
-    elseif arg == 35 then return 'РПГ'
-    elseif arg == 36 then return 'самонаводящейся ракеты'
-    elseif arg == 37 then return 'огнемёта'
-    elseif arg == 38 then return 'минигана'
-    elseif arg == 39 then return 'кулака'
-    elseif arg == 40 then return 'сумки с тротилом'
-    elseif arg == 41 then return 'баллончика краски'
-    elseif arg == 42 then return 'огнетушителя'
-    elseif arg == 43 then return 'кулака'
-    elseif arg == 44 then return 'кулака'
-    elseif arg == 45 then return 'кулака'
-    elseif arg == 46 then return 'кулака'
-    else return false
-    end
-end
 
 function save()
     ini.tg.id = u8:decode(str(settings.id))
