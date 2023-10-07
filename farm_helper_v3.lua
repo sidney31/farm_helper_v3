@@ -148,6 +148,7 @@ local tls, tlstime = 0, 0
 local use = 0
 local close = 0
 local userId = 0
+local wbook = false;
 
 function msg(...) sampAddChatMessage(table.concat({...}, '  '), -1) end
 
@@ -157,7 +158,7 @@ bot:on('message', function(message)
     if message.text == '/start' then
         bot:sendMessage{chat_id = ChatId, text = u8('Управление кнопками'), reply_markup = {
             keyboard = {
-                { { text = u8('Открыть сундуки') } },
+                { { text = u8('Открыть сундуки') }, {text=u8('Часов в организации')} },
                 { { text = u8('Статистика') }, { text = u8('Действия с сервером') } },
             }
         }}
@@ -171,6 +172,8 @@ bot:on('message', function(message)
                 { { text = u8('Перезайти'), callback_data = 'rec' }, { text = u8('Выйти'), callback_data = 'quit' } },
             }
         }}
+    elseif message.text == u8('Часов в организации') then
+        checkHoursInOrganization()
     else
         bot:sendMessage{chat_id = ChatId, text = u8('Неизвестная команда')}
     end
@@ -192,7 +195,9 @@ function openKeys()
     wait(200)
     sampSendDialogResponse(32, 0, -1, 123)
     wait(300)
-    if sampTextdrawIsExists(close) then sampSendClickTextdraw(close) end
+    if sampTextdrawIsExists(close) then 
+        sampSendClickTextdraw(close)
+    end
     wait(300)
     sampSendChat('/invent')
     sampAddChatMessage('invent', -1)
@@ -237,14 +242,37 @@ function getStats()
     stats = true
 end
 
+-- function check_health()
+--     lua_thread.create(function ()
+--         while true do
+--             local healthBefore = sampGetPlayerHealth(select(2, sampGetPlayerIdByCharHandle(PLAYER_PED)))
+--             wait(10000)
+--             local healthAfter = sampGetPlayerHealth(select(2, sampGetPlayerIdByCharHandle(PLAYER_PED)))
+--             if healthBefore > healthAfter then
+--                 bot:sendMessage{
+--                     chat_id = ChatId, 
+--                     text = u8('Получено %d урона. Осталось %d единиц здоровья'):format(healthBefore-healthAfter, healthAfter)
+--                 }
+--             end
+--         end
+--     end)
+-- end
+
+function checkHoursInOrganization()
+    local result = -1;
+    sampSendChat('/wbook')
+    wbook = true;
+    return result;
+end
+
 function separator(n)
     n = tostring(n)
     local left, num, right = string.match(n, '^([^%d]*%d)(%d*)(.-)$')
     return left .. (num:reverse():gsub('(%d%d%d)', '%1,'):reverse()) .. right
 end
 
-
 function sampev.onShowTextDraw(id, data)
+    -------------------------------------------СУНДУКИ-------------------------------------------
     --if id == 2112 then sampSetChatInputText(data.text) end
     if data.modelId == 19918 then box = id end
     if data.modelId == 19613 then dbox = id end
@@ -275,9 +303,19 @@ function sampev.onShowTextDraw(id, data)
             bot:sendMessage{chat_id = ChatId, text = u8('До открытия тайника Лос-Сантос осталось ' .. tlstime .. ' минут.')}
         end
     end
+
+    -------------------------------------------Дамаг информер-------------------------------------------
+    if id == 2049 then
+        bot:sendMessage{
+            chat_id = ChatId,
+            text = u8(data.text)
+        }
+    end
 end
 
 function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
+    sampAddChatMessage(dialogId, -1)
+    
     if dialogId == 32 and roulettes then
         sampSendDialogResponse(dialogId, 0, -1, -1)
         lua_thread.create(function ()
@@ -330,6 +368,23 @@ function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
     if dialogId == 0 and text:find('Удача!') then
         sampSendDialogResponse(0, 1, 0, -1)
         return false
+    end
+
+    if dialogId == 25228 and wbook then
+        sampSendDialogResponse(dialogId, 1, 0, -1)
+    end
+    if dialogId == 25627 and wbook then
+        if text:find('(%d+) часов') then
+            local hours = text:match('(%d+) часов')
+            bot:sendMessage{chat_id = ChatId, text = u8('Во фракции отыграно '..hours..' часов')}
+        end
+        wbook = false
+        lua_thread.create(function ()
+            wait(500)
+            sampCloseCurrentDialogWithButton(0)
+            wait(500)
+            sampCloseCurrentDialogWithButton(0)
+        end)
     end
 end
 
@@ -500,7 +555,7 @@ end
 
 function main()
     while not isSampAvailable() do wait(0) end
-    wait(-1)
+    wait(0)
     
     settings.joinNotif[0] = ini.main.joinNotif
     settings.beforePd[0] = ini.main.beforePd
@@ -529,4 +584,6 @@ function main()
     settings.lvlexp[0] = ini.payday.lvlexp
     settings.buysellN[0] = ini.logs.buysellN
     settings.damageN[0] = ini.logs.damageN
+
+    -- check_health()
 end
