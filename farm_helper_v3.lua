@@ -12,7 +12,7 @@ sandro
 ]]
 
 script_name("farm_helper_v3.lua")
-script_version("09.10.2023")
+script_version("08.10.2023")
 
 local Telegram = require('dolbogram')
 local encoding = require('encoding')
@@ -745,7 +745,6 @@ function autoupdate(json_url, prefix, url)
                         if updateversion ~= thisScript().version then
                             lua_thread.create(function(prefix)
                                 local dlstatus = require('moonloader').download_status
-                                local color = -1
                                 sampAddChatMessage(
                                 ('{5BCEFA}[AFK-FARM HELPER] {FFFFFF}Обнаружено обновление. Текущая версия: ' .. thisScript().version .. ', последняя версия ' .. updateversion),
                                     -1)
@@ -756,7 +755,7 @@ function autoupdate(json_url, prefix, url)
                                             print(string.format('Загружено %d из %d.', p13, p23))
                                         elseif status1 == dlstatus.STATUS_ENDDOWNLOADDATA then
                                             print('Загрузка обновления завершена.')
-                                            sampAddChatMessage((prefix .. 'Обновление завершено!'),
+                                            sampAddChatMessage('{5BCEFA}[AFK-FARM HELPER] {FFFFFF}Обновление завершено!',
                                                 -1)
                                             goupdatestatus = true
                                             lua_thread.create(function()
