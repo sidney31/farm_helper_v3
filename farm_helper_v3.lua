@@ -12,13 +12,11 @@ sandro
 ]]
 
 local Telegram = require('dolbogram')
-local bot = Telegram('5891391707:AAEHRP2JRSA0ALD5r3JG8v3-v5IRhvmQF_k')
-local ChatId = 976221897
 local encoding = require('encoding')
 encoding.default = 'CP1251'
 local u8 = encoding.UTF8
 
-local effil = require("effil")
+local fa = require("fAwesome5")
 local ffi = require('ffi')
 local imgui = require('mimgui')
 local new, str, sizeof = imgui.new, ffi.string, ffi.sizeof
@@ -31,90 +29,15 @@ local ini = inicfg.load(inicfg.load({
         id = '',
         token = '',
     },
-
-    main = {
-        joinNotif = true,
-        beforePd = true,
-        min = 3,
-        pd = true,
-        hungry = true,
-        autoeat = true,
-        method = 1,
-        userId = 0,
-    },
-
-    boxes = {
-        box = true,
-        dbox = true,
-        pbox = true,
-        tmask = true,
-        tls = true,
-    },
-
-    stats ={
-        sdonate = true,
-        shp = true,
-        ssat = true,
-        slvl = true,
-        sexp = true,
-        smoney = true,
-        sbank = true,
-        sdep = true,
-    },
-
-    payday = {
-        payday = true,
-        bank = true,
-        depplus = true,
-        depall = true,
-        lvlexp = true,
-    },
-
-    logs = {
-        tags = '',
-        buysellN = true,
-        damageN = true,
-    },
 }, directIni))
 inicfg.save(ini, directIni)
-
+local bot = Telegram(ini.tg.token)
 
 local settings = {
+    token = new.char[256](u8:decode(ini.tg.token)),
+    id = new.char[256](u8:decode(ini.tg.id)),
     renderWindow = false,
     tgWindow = new.bool(),
-    checkbox = new.bool(),
-    joinNotif = new.bool(),
-    beforePd = new.bool(),
-    min = new.int(0),
-    pd = new.bool(),
-    hungry = new.bool(),
-    autoeat = new.bool(),
-    method = new.int(0),
-    box = new.bool(),
-    dbox = new.bool(),
-    pbox = new.bool(),
-    tmask = new.bool(),
-    tls = new.bool(),
-    token = new.char[256](u8:decode(ini.tg.token)),
-    tags = new.char[256](str(ini.logs.tags)),
-    ttags = new.char[256](),
-    id = new.char[256](u8:decode(ini.tg.id)),
-    sdonate = new.bool(),
-    shp = new.bool(),
-    ssat = new.bool(),
-    slvl = new.bool(),
-    sexp = new.bool(),
-    smoney = new.bool(),
-    sbank = new.bool(),
-    sdep = new.bool(),
-    payday = new.bool(),
-    bank = new.bool(),
-    depplus = new.bool(),
-    depall = new.bool(),
-    lvlexp = new.bool(),
-    buysellN = new.bool(),
-    damageN = new.bool(),
-    userId = new.int(0),
 }
 
 local az = ''
@@ -124,7 +47,6 @@ local exp = ''
 local money = ''
 local bank = ''
 local deposite = ''
-local satiety = ''
 local sNotif ='-Статистика-\n'
 
 local n_deppd = ''
@@ -134,9 +56,7 @@ local n_allbankpd = ''
 local n_lvl, n_exp = '', ''
 local pdNotif = '-PayDay-'
 
-local eat = true
 local out = ''
-local payday = false
 local stats = false
 
 local roulettes = false
@@ -147,8 +67,9 @@ local tmask, tmasktime = 0, 0
 local tls, tlstime = 0, 0
 local use = 0
 local close = 0
-local userId = 0
 local wbook = false;
+
+local resX, resY = getScreenResolution()
 
 function msg(...) sampAddChatMessage(table.concat({...}, '  '), -1) end
 
@@ -156,7 +77,7 @@ bot:connect()
 
 bot:on('message', function(message)
     if message.text == '/start' then
-        bot:sendMessage{chat_id = ChatId, text = u8('Управление кнопками'), reply_markup = {
+        bot:sendMessage{chat_id = tonumber(ini.tg.id), text = u8('Управление кнопками'), reply_markup = {
             keyboard = {
                 { { text = u8('Открыть сундуки') }, {text=u8('Часов в организации')} },
                 { { text = u8('Статистика') }, { text = u8('Действия с сервером') } },
@@ -167,7 +88,7 @@ bot:on('message', function(message)
     elseif message.text == u8('Статистика') then
         getStats()
     elseif message.text == u8('Действия с сервером') then
-        bot:sendMessage{chat_id = ChatId, text = u8('Что хочешь сделать?'), reply_markup = {
+        bot:sendMessage{chat_id = tonumber(ini.tg.id), text = u8('Что хочешь сделать?'), reply_markup = {
             inline_keyboard = {
                 { { text = u8('Перезайти'), callback_data = 'rec' }, { text = u8('Выйти'), callback_data = 'quit' } },
             }
@@ -175,17 +96,17 @@ bot:on('message', function(message)
     elseif message.text == u8('Часов в организации') then
         checkHoursInOrganization()
     else
-        bot:sendMessage{chat_id = ChatId, text = u8('Неизвестная команда')}
+        bot:sendMessage{chat_id = tonumber(ini.tg.id), text = u8('Неизвестная команда')}
     end
 end)
 
 bot:on('callback_query', function(query)
     if query.data == 'rec' then
         sampSendChat('/rec')
-        bot:sendMessage{chat_id = ChatId, text = u8('Выполнен перезаход')}
+        bot:sendMessage{chat_id = tonumber(ini.tg.id), text = u8('Выполнен перезаход')}
     elseif query.data == 'quit' then
         sampProcessChatInput('/q')
-        bot:sendMessage{chat_id = ChatId, text = u8('Игра закрыта')}
+        bot:sendMessage{chat_id = tonumber(ini.tg.id), text = u8('Игра закрыта')}
     end
 end)
 
@@ -269,32 +190,24 @@ function sampev.onShowTextDraw(id, data)
     if roulettes then
         if data.text:find('(%d+) min') and ini.boxes.box and id == tonumber(box) + 1 then
             boxtime = data.text:match('(%d+)') 
-            bot:sendMessage{chat_id = ChatId, text = u8('До открытия сундука осталось ' .. boxtime .. ' минут.')}
+            bot:sendMessage{chat_id = tonumber(ini.tg.id), text = u8('До открытия сундука осталось ' .. boxtime .. ' минут.')}
         end
         if data.text:find('(%d+) min') and ini.boxes.dbox and id == tonumber(dbox) + 1 then
             dboxtime = data.text:match('(%d+)') 
-            bot:sendMessage{chat_id = ChatId, text = u8('До открытия донатного сундука осталось ' .. dboxtime .. ' минут.')}
+            bot:sendMessage{chat_id = tonumber(ini.tg.id), text = u8('До открытия донатного сундука осталось ' .. dboxtime .. ' минут.')}
         end
         if data.text:find('(%d+) min') and ini.boxes.pbox and id == tonumber(pbox) + 1 then
             pboxtime = data.text:match('(%d+)') 
-            bot:sendMessage{chat_id = ChatId, text = u8('До открытия платинового сундука осталось ' .. pboxtime .. ' минут.')}
+            bot:sendMessage{chat_id = tonumber(ini.tg.id), text = u8('До открытия платинового сундука осталось ' .. pboxtime .. ' минут.')}
         end
         if data.text:find('(%d+) min') and ini.boxes.tmask and id == tonumber(tmask) + 1 then
             tmasktime = data.text:match('(%d+)') 
-            bot:sendMessage{chat_id = ChatId, text = u8('До открытия тайника Илона Маска осталось ' .. tmasktime .. ' минут.')}
+            bot:sendMessage{chat_id = tonumber(ini.tg.id), text = u8('До открытия тайника Илона Маска осталось ' .. tmasktime .. ' минут.')}
         end
         if data.text:find('(%d+) min') and ini.boxes.tls and id == tonumber(tls) + 1 then
             tlstime = data.text:match('(%d+)') 
-            bot:sendMessage{chat_id = ChatId, text = u8('До открытия тайника Лос-Сантос осталось ' .. tlstime .. ' минут.')}
+            bot:sendMessage{chat_id = tonumber(ini.tg.id), text = u8('До открытия тайника Лос-Сантос осталось ' .. tlstime .. ' минут.')}
         end
-    end
-
-    -------------------------------------------Дамаг информер-------------------------------------------
-    if id == 2049 then
-        bot:sendMessage{
-            chat_id = ChatId,
-            text = u8(data.text)
-        }
     end
 end
 
@@ -338,7 +251,7 @@ function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
     end
     if stats then
         stats = false
-        bot:sendMessage{chat_id = ChatId, text = u8(sNotif)}
+        bot:sendMessage{chat_id = tonumber(ini.tg.id), text = u8(sNotif)}
         sampSendDialogResponse(0, 1, 0, -1)
     end
 
@@ -352,7 +265,7 @@ function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
     if dialogId == 25627 and wbook then
         if text:find('(%d+) часов') then
             local hours = text:match('(%d+) часов')
-            bot:sendMessage{chat_id = ChatId, text = u8('Во фракции отыграно '..hours..' часов')}
+            bot:sendMessage{chat_id = tonumber(ini.tg.id), text = u8('Во фракции отыграно '..hours..' часов')}
         end
         wbook = false
     end
@@ -360,7 +273,7 @@ end
 
 function sampev.onServerMessage(color, text)
     if text:find('Добро пожаловать на Arizona Role Play!')  then
-        bot:sendMessage{chat_id = ChatId, text = u8('Вы присоеденились к серверу!')}
+        bot:sendMessage{chat_id = tonumber(ini.tg.id), text = u8('Вы присоеденились к серверу!')}
     end
     if text:find('_____Банковский чек_____') then
         pdNotif = '-PayDay-'
@@ -384,61 +297,51 @@ function sampev.onServerMessage(color, text)
     if text:find('В данный момент у вас (%d+)-й уровень и (%d+/%d+) респектов') then
         n_lvl, n_exp = text:match('В данный момент у вас (%d+)-й уровень и (%d+/%d+) респектов')
         pdNotif = pdNotif..'\nУровень: '..n_lvl..'. Уважение: '..n_exp
-        bot:sendMessage{chat_id = ChatId, text = u8(pdNotif)}
+        bot:sendMessage{chat_id = tonumber(ini.tg.id), text = u8(pdNotif)}
     end
     if text:find('Вы отыграли только %d+ минут без АФК!') then
-        bot:sendMessage{chat_id = ChatId, text = u8'Пэйдэй не был получен, '..text}
+        bot:sendMessage{chat_id = tonumber(ini.tg.id), text = u8'Пэйдэй не был получен, '..text}
     end
 
     if roulettes then
         if text:find('Вы использовали сундук с рулетками и получили (.*)!') then
             out = text:match('Вы использовали сундук с рулетками и получили (.*)!')
-             bot:sendMessage{chat_id = ChatId, text = u8('Открыт сундук с рулетками. Получили ' .. out .. '.')}
+             bot:sendMessage{chat_id = tonumber(ini.tg.id), text = u8('Открыт сундук с рулетками. Получили ' .. out .. '.')}
         end
         if text:find('Вы использовали платиновый сундук с рулетками и получили (.*)!') then
             out = text:match('Вы использовали платиновый сундук с рулетками и получили (.*)!')
-             bot:sendMessage{chat_id = ChatId, text = u8('Открыт платиновый сундук с рулетками. Получили ' .. out .. '.')}
+             bot:sendMessage{chat_id = tonumber(ini.tg.id), text = u8('Открыт платиновый сундук с рулетками. Получили ' .. out .. '.')}
         end
         if text:find('Вы использовали тайник Илона Маска и получили (.*)!') then
             out = text:match('Вы использовали тайник Илона Маска и получили (.*)!')
-             bot:sendMessage{chat_id = ChatId, text = u8('Открыт тайник Илона Маска. Получен ' .. out .. '.')}
+             bot:sendMessage{chat_id = tonumber(ini.tg.id), text = u8('Открыт тайник Илона Маска. Получен ' .. out .. '.')}
         end
         if text:find('Вы использовали тайник Лос Сантоса и получили (.*)!') then
             out = text:match('Вы использовали тайник Лос Сантоса и получили (.*)!')
-             bot:sendMessage{chat_id = ChatId, text = u8('Открыт тайник Лос Сантоса. Получен ' .. out .. '.')}
+             bot:sendMessage{chat_id = tonumber(ini.tg.id), text = u8('Открыт тайник Лос Сантоса. Получен ' .. out .. '.')}
         end
     end
     if text:find('Вы купили (.+) %((%d+) шт%.%) у игрока (%w+_%w+) за $(%d+)') then
         local item, lot, name, sum = text:match('Вы купили (.+) %((%d+) шт%.%) у игрока (%w+_%w+) за $(%d+)')
         local text = name .. ' продал ' .. lot .. ' ' .. item .. ', на сумму: $' .. separator(tostring(sum))
-        bot:sendMessage{chat_id = ChatId, text = u8(text)}
+        bot:sendMessage{chat_id = tonumber(ini.tg.id), text = u8(text)}
     end
 
     if text:find('(%w+_%w+) купил у вас (.+) %((%d+) шт%.%), вы получили $(%d+) от продажи %(комиссия %d* процент%(а%)%)') then
         local name, item, lot, sum = text:match('(%w+_%w+) купил у вас (.+) %((%d+) шт%.%), вы получили $(%d+) от продажи %(комиссия %d* процент%(а%)%)')
         local text = name .. ' купил ' .. lot .. ' ' .. item .. ', на сумму: $' .. separator(tostring(sum))
-        bot:sendMessage{chat_id = ChatId, text = u8(text)}
+        bot:sendMessage{chat_id = tonumber(ini.tg.id), text = u8(text)}
     end
 end
 
--- function sampev.onSendTakeDamage(playerId, damage, weapon, bodypart)
---     local res, id = sampGetPlayerIdByCharHandle(PLAYER_PED)
---     if ini.logs.damageN then
---         if playerId <= 999 and weapon <= 47 and weapon ~= 34 then
---             lua_thread.create(function()
---                 wait(100)
---                 bot:sendMessage{chat_id = ChatId, text = u8('Игрок '..sampGetPlayerNickname(playerId)..'  нанёс вам урон при помощи  '..sampGetGunNameById(weapon)..'.\nОсталось '..sampGetPlayerHealth(id)..' hp.')}
---             end)
---         elseif sampGetGamestate() == 3 then
---         lua_thread.create(function()
---                 wait(100)
---                 bot:sendMessage{chat_id = ChatId, text = u8('Был получен урон.\nОсталось '..sampGetPlayerHealth(id)..' hp.')}
---             end)
---         else
---             return false
---         end
---     end
--- end
+function sampev.onSendTakeDamage(playerId, damage, weapon, bodypart)
+    local id = select(2, sampGetPlayerIdByCharHandle(PLAYER_PED))
+    if playerId <= 999 then
+        bot:sendMessage{chat_id = tonumber(ini.tg.id), text = u8('Получен урон от '..sampGetPlayerNickname(playerId)..'\nОсталось '..sampGetPlayerHealth(id)..' единиц здоровья')}
+    else
+        bot:sendMessage{chat_id = tonumber(ini.tg.id), text = u8('Получен неизвестный урон. Осталось '..sampGetPlayerHealth(id)..' единиц здоровья')}
+    end
+end
 
 function sampGetGunNameById(arg)
     gunList = {
@@ -459,68 +362,306 @@ end
 function save()
     ini.tg.id = u8:decode(str(settings.id))
     ini.tg.token = u8:decode(str(settings.token))
-    ini.main.joinNotif = settings.joinNotif[0]
-    ini.main.beforePd = settings.beforePd[0]
-    ini.main.min = settings.min[0]
-    ini.main.pd = settings.pd[0]
-    ini.main.hungry = settings.hungry[0]
-    ini.main.autoeat = settings.autoeat[0]
-    ini.main.method = settings.method[0]
-    ini.boxes.box = settings.box[0]
-    ini.boxes.dbox = settings.dbox[0]
-    ini.boxes.pbox = settings.pbox[0]
-    ini.boxes.tmask = settings.tmask[0]
-    ini.boxes.tls = settings.tls[0]
-    ini.stats.sdonate = settings.sdonate[0]
-    ini.stats.shp = settings.shp[0]
-    ini.stats.ssat = settings.ssat[0]
-    ini.stats.slvl = settings.slvl[0]
-    ini.stats.sexp = settings.sexp[0]
-    ini.stats.smoney = settings.smoney[0]
-    ini.stats.sbank = settings.sbank[0]
-    ini.stats.sdep = settings.sdep[0]
-    ini.payday.payday = settings.payday[0]
-    ini.payday.bank = settings.bank[0]
-    ini.payday.depplus = settings.depplus[0]
-    ini.payday.depall = settings.depall[0]
-    ini.payday.lvlexp = settings.lvlexp[0]
-    ini.logs.tags = str(settings.tags)
-    ini.logs.buysellN = settings.buysellN[0]
-    ini.logs.damageN = settings.damageN[0]
     inicfg.save(ini, directIni)
 end
 
 function main()
     while not isSampAvailable() do wait(0) end
+    sampRegisterChatCommand('tg', function ()
+        settings.renderWindow = not settings.renderWindow
+    end)
     wait(0)
-    
-    settings.joinNotif[0] = ini.main.joinNotif
-    settings.beforePd[0] = ini.main.beforePd
-    settings.min[0] = ini.main.min
-    settings.pd[0] = ini.main.pd
-    settings.hungry[0] = ini.main.hungry
-    settings.autoeat[0] = ini.main.autoeat
-    settings.method[0] = ini.main.method
-    settings.box[0] = ini.boxes.box
-    settings.dbox[0] = ini.boxes.dbox
-    settings.pbox[0] = ini.boxes.pbox
-    settings.tmask[0] = ini.boxes.tmask
-    settings.tls[0] = ini.boxes.tls
-    settings.sdonate[0] = ini.stats.sdonate
-    settings.shp[0] = ini.stats.shp
-    settings.ssat[0] = ini.stats.ssat
-    settings.sexp[0] = ini.stats.sexp
-    settings.slvl[0] = ini.stats.slvl
-    settings.smoney[0] = ini.stats.smoney
-    settings.sbank[0] = ini.stats.sbank
-    settings.sdep[0] = ini.stats.sdep
-    settings.payday[0] = ini.payday.payday
-    settings.bank[0] = ini.payday.bank
-    settings.depplus[0] = ini.payday.depplus
-    settings.depall[0] = ini.payday.depall
-    settings.lvlexp[0] = ini.payday.lvlexp
-    settings.buysellN[0] = ini.logs.buysellN
-    settings.damageN[0] = ini.logs.damageN
+end
 
-    -- check_health()
+imgui.OnInitialize(function()
+    imgui.DarkTheme()
+    imgui.GetIO().IniFilename = nil
+    local config = imgui.ImFontConfig()
+    config.MergeMode = true
+    local glyph_ranges = imgui.GetIO().Fonts:GetGlyphRangesCyrillic()
+    local iconRanges = imgui.new.ImWchar[3](fa.min_range, fa.max_range, 0)
+    imgui.GetIO().Fonts:AddFontFromFileTTF('trebucbd.ttf', 14.0, nil, glyph_ranges)
+    icon = imgui.GetIO().Fonts:AddFontFromFileTTF('moonloader/resource/fonts/fa-solid-900.ttf', 15.0, config, iconRanges)
+    mini = imgui.GetIO().Fonts:AddFontFromFileTTF(getFolderPath(0x14) .. '\\trebucbd.ttf', 13.0, _, glyph_ranges)
+    medium = imgui.GetIO().Fonts:AddFontFromFileTTF(getFolderPath(0x14) .. '\\trebucbd.ttf', 20.0, _, glyph_ranges)
+    mediumplus = imgui.GetIO().Fonts:AddFontFromFileTTF(getFolderPath(0x14) .. '\\trebucbd.ttf', 18.0, _, glyph_ranges)
+    big = imgui.GetIO().Fonts:AddFontFromFileTTF(getFolderPath(0x14) .. '\\trebucbd.ttf', 30.0, _, glyph_ranges)
+end)
+
+imgui.OnFrame(function() return settings.renderWindow end,
+    function()
+        renderDrawBox(0, 0, resX, resY, 0x50000000)
+        imgui.SetNextWindowPos(imgui.ImVec2(resX / 2, resY / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+        imgui.SetNextWindowSize(imgui.ImVec2(400, 300), imgui.Cond.FirstUseEver)
+        imgui.PushStyleColor(imgui.Col.ChildBg, imgui.ImVec4(0.48, 0.48, 0.48, 0.03))
+        imgui.Begin('##window', _, imgui.WindowFlags.NoTitleBar + imgui.WindowFlags.NoResize + imgui.WindowFlags.NoMove + imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoScrollbar)
+        imgui.BeginChild('header', imgui.ImVec2(390, 30))
+        imgui.PushFont(big)
+        imgui.PushStyleColor(imgui.Col.Button, imgui.ImVec4(0.25, 0.25, 0.26, 0.0))
+        imgui.PushStyleColor(imgui.Col.Border, imgui.ImVec4(0.25, 0.25, 0.26, 0.0))
+        imgui.PushStyleColor(imgui.Col.ButtonHovered, imgui.ImVec4(0.25, 0.25, 0.26, 0.0))
+        imgui.PushStyleColor(imgui.Col.ButtonActive, imgui.ImVec4(0.25, 0.25, 0.26, 0.0))
+        if imgui.Button('##AFK-FARM HELPER', imgui.ImVec2(240, 30)) then
+            tab = nil
+        end
+        imgui.SameLine()
+        imgui.SetCursorPosX(5)
+        imgui.SetCursorPosY(-5)
+        imgui.Text('AFK-FARM HELPER')
+        imgui.PopStyleColor(4)
+        imgui.PopFont()
+        imgui.SameLine()
+        imgui.PushStyleVarFloat(imgui.StyleVar.FrameRounding, 15)
+        imgui.PushStyleColor(imgui.Col.Border, imgui.ImVec4(0.48, 0.48, 0.48, 0.00))
+        imgui.SetCursorPosX(325)
+        imgui.SetCursorPosY(0)
+        if imgui.Button(fa.ICON_FA_PAPER_PLANE, imgui.ImVec2(30, 30)) then settings.tgWindow[0] = true
+        settings.renderWindow = false
+        end
+        imgui.SameLine()
+        if imgui.Button(fa.ICON_FA_TIMES, imgui.ImVec2(30, 30)) then settings.renderWindow = false end
+        imgui.PopStyleVar(1)
+        imgui.EndChild()
+        imgui.PopStyleColor(1)
+        imgui.PushStyleVarFloat(imgui.StyleVar.ChildBorderSize, 0)
+        imgui.PushStyleColor(imgui.Col.ChildBg, imgui.ImVec4(0.48, 0.48, 0.48, 0.03))
+        imgui.BeginChild('tabs', imgui.ImVec2(45, 255), true)
+        imgui.SetCursorPosX(45 / 2 - 40 / 2)
+        if tab == 1 then
+            imgui.PushStyleColor(imgui.Col.Button, imgui.ImVec4(0.25, 0.25, 0.26, 0.6))
+        else
+            imgui.PushStyleColor(imgui.Col.Button, imgui.ImVec4(0.25, 0.25, 0.26, 0.0))
+        end
+        if imgui.Button(fa.ICON_FA_COG .. '##1', imgui.ImVec2(40, 40)) then tab = 1 end
+        imgui.SetCursorPosX(45 / 2 - 40 / 2)
+        if tab == 2 then
+            imgui.PushStyleColor(imgui.Col.Button, imgui.ImVec4(0.25, 0.25, 0.26, 0.6))
+        else
+            imgui.PushStyleColor(imgui.Col.Button, imgui.ImVec4(0.25, 0.25, 0.26, 0.0))
+        end
+        if imgui.Button(fa.ICON_FA_BOXES .. '##2', imgui.ImVec2(40, 40)) then tab = 2 end
+        imgui.SetCursorPosX(45 / 2 - 40 / 2)
+        if tab == 3 then
+            imgui.PushStyleColor(imgui.Col.Button, imgui.ImVec4(0.25, 0.25, 0.26, 0.6))
+        else
+            imgui.PushStyleColor(imgui.Col.Button, imgui.ImVec4(0.25, 0.25, 0.26, 0.0))
+        end
+        if imgui.Button(fa.ICON_FA_TASKS .. '##3', imgui.ImVec2(40, 40)) then tab = 3 end
+        imgui.SetCursorPosX(45 / 2 - 40 / 2)
+        if tab == 4 then
+            imgui.PushStyleColor(imgui.Col.Button, imgui.ImVec4(0.25, 0.25, 0.26, 0.6))
+        else
+            imgui.PushStyleColor(imgui.Col.Button, imgui.ImVec4(0.25, 0.25, 0.26, 0.0))
+        end
+        if imgui.Button(fa.ICON_FA_FILE_ALT .. '##4', imgui.ImVec2(40, 40)) then tab = 4 end
+        imgui.EndChild()
+        imgui.PopStyleColor(4)
+        imgui.SameLine()
+        if tab == nil then
+            imgui.BeginChild('tab0', imgui.ImVec2(340, 255), true)
+            imgui.Separator()
+            imgui.PushFont(medium)
+            imgui.Text(u8 'Что такое token?')
+            imgui.PopFont()
+            imgui.TextColored(imgui.ImVec4(0.9, 0.9, 0.9, 1.0), u8 'Token – это уникальный идентификатор вашего бота.\nДля получения токена необходимо в телеграме найти\nбота @BotFather и написать ему /newbot, после ввода\nназвания и имени бота вы увидите сообщение с\nтокеном. Копируем и вставляем в настройки.')
+            imgui.Separator()
+            imgui.PushFont(medium)
+            imgui.Text(u8 'Что такое id?')
+            imgui.PopFont()
+            imgui.TextColored(imgui.ImVec4(0.9, 0.9, 0.9, 1.0), u8 'Id – это уникальный идентификатор вашего профиля.\nДля получения id необходимо найти бота @my_id_bot\nи написать ему /start. Затем вы увидете сообщение\nс вашим id. Копируем и вставляем в настройки.')
+            imgui.Separator()
+            imgui.SetCursorPosX(183)
+            imgui.TextDisabled(u8 '\nАвторы: Sidney31, Sandro;')
+            imgui.SetCursorPosX(264)
+            imgui.TextDisabled(u8 'Версия: 0.1;')
+            imgui.EndChild()
+        end
+        -- if tab == 1 then
+        --     imgui.BeginChild('tab1', imgui.ImVec2(340, 255), true)
+        --     if imgui.Checkbox(u8 ' Уведомление о входе на сервер.', settings.joinNotif) then save() end
+        --     if imgui.Checkbox(u8 ' Предупреждение о', settings.beforePd) then save() end
+        --     imgui.PushItemWidth(22)
+        --     imgui.SameLine()
+        --     if imgui.InputInt("##1", settings.min, 0, 0) then save() end
+        --     imgui.SameLine()
+        --     if settings.min[0] == 1 then
+        --         imgui.Text(u8 '-й минуте до пейдея.')
+        --     elseif settings.min[0] >= 2 and settings.min[0] <= 4 then
+        --         imgui.Text(u8 '-х минутах до пейдея.')
+        --     elseif settings.min[0] == 24 or settings.min[0] == 34 or settings.min[0] == 44 or settings.min[0] == 54
+        --         or settings.min[0] == 23 or settings.min[0] == 33 or settings.min[0] == 43 or settings.min[0] == 53 then
+        --         imgui.Text(u8 '-ёх минутах до пейдея.')
+        --     else
+        --         imgui.Text(u8 '-и минутах до пейдея.')
+        --     end
+        --     if imgui.Checkbox(u8 ' Уведомление с информацией о пейдее.', settings.pd) then save() end
+        --     if imgui.Checkbox(u8 ' Уведомление о голоде персонажа.', settings.hungry) then save() end
+        --     if imgui.Checkbox(u8 ' Автоеда при голоде персонажа.', settings.autoeat) then save() end
+        --     local method = imgui.new['const char*'][#methodList](methodList)
+        --     imgui.PushItemWidth(225)
+        --     if imgui.Combo('##method', settings.method, method, #methodList) then save() end
+        --     imgui.PopItemWidth()
+        --     imgui.EndChild()
+        -- elseif tab == 2 then
+        --     imgui.BeginChild('tab2', imgui.ImVec2(340, 255), true)
+        --     if imgui.Checkbox(u8 ' Сундук рулетки.', settings.box) then save() end
+        --     if imgui.Checkbox(u8 ' Сундук рулетки (донат).', settings.dbox) then save() end
+        --     if imgui.Checkbox(u8 ' Сундук платиновой рулетки.', settings.pbox) then save() end
+        --     if imgui.Checkbox(u8 ' Тайник Илона Маска.', settings.tmask) then save() end
+        --     if imgui.Checkbox(u8 ' Тайник Лос-Сантос.', settings.tls) then save() end
+        --     imgui.EndChild()
+        -- elseif tab == 3 then
+        --     imgui.BeginChild('tab3', imgui.ImVec2(340, 255), true)
+        --     imgui.PushFont(mediumplus)
+        --     imgui.Text(u8 'Статистика:')
+        --     imgui.PopFont()
+        --     imgui.PushStyleVarFloat(imgui.StyleVar.FrameRounding, 15)
+        --     imgui.PushFont(mini)
+        --     if imgui.Checkbox(u8 'Донат счёт;', settings.sdonate) then save() end
+        --     if imgui.Checkbox(u8 'Здоровье;', settings.shp) then save() end
+        --     if imgui.Checkbox(u8 'Сытость;', settings.ssat) then save() end
+        --     if imgui.Checkbox(u8 'Уровень;', settings.slvl) then save() end
+        --     if imgui.Checkbox(u8 'Уважение;', settings.sexp) then save() end
+        --     if imgui.Checkbox(u8 'Деньги на руках;', settings.smoney) then save() end
+        --     if imgui.Checkbox(u8 'Деньги на счёту;', settings.sbank) then save() end
+        --     if imgui.Checkbox(u8 'Деньги на депозите;', settings.sdep) then save() end
+        --     imgui.PopFont()
+        --     imgui.Separator()
+        --     imgui.PushFont(mediumplus)
+        --     imgui.Text(u8 'Пейдей:')
+        --     imgui.PopFont()
+        --     imgui.PushFont(mini)
+        --     if imgui.Checkbox(u8 'Зарплата;', settings.payday) then save() end
+        --     if imgui.Checkbox(u8 'Состояние счёта;', settings.bank) then save() end
+        --     if imgui.Checkbox(u8 'Прибавок к депозиту;', settings.depplus) then save() end
+        --     if imgui.Checkbox(u8 'Состояние депозита;', settings.depall) then save() end
+        --     if imgui.Checkbox(u8 'Уровень и уважение;' .. '##2', settings.lvlexp) then save() end
+        --     imgui.PopFont()
+        --     imgui.PopStyleVar(1)
+        --     imgui.EndChild()
+        -- elseif tab == 4 then
+        --     imgui.BeginChild('tab4', imgui.ImVec2(340, 255), true)
+        --     imgui.PushItemWidth(340)
+        --     if imgui.InputText("##tags", settings.tags, 256) then save() end
+        --     if #str(settings.tags) == 0 then
+        --         imgui.SameLine(325 / 2 - imgui.CalcTextSize(u8'Ключевые слова').x / 2)
+        --         imgui.TextDisabled(u8'Ключевые слова')
+        --     end
+        --     if imgui.Checkbox(u8 'Уведомление о дамаге;', settings.damageN) then save() end
+        --     if imgui.Checkbox(u8 'Уведомление покупке/продаже;', settings.buysellN) then save() end
+        --     imgui.PopItemWidth()
+        --     imgui.EndChild()
+        -- end
+        imgui.PopStyleVar(1)
+    end)
+
+
+imgui.OnFrame(function() return settings.tgWindow[0] end,
+    function()
+        renderDrawBox(0, 0, resX, resY, 0x99000000)
+        imgui.SetNextWindowPos(imgui.ImVec2(resX / 2, resY / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+        imgui.SetNextWindowSize(imgui.ImVec2(200, 100), imgui.Cond.FirstUseEver)
+        imgui.Begin('##tgwindow', _, imgui.WindowFlags.NoTitleBar + imgui.WindowFlags.NoResize + imgui.WindowFlags.NoMove + imgui.WindowFlags.NoCollapse)
+        imgui.PushItemWidth(190)
+        if imgui.InputText('##token', settings.token, sizeof(settings.token)) then save() end
+        if #str(settings.token) == 0 then
+            imgui.SameLine(5 + 190 / 2 - imgui.CalcTextSize('Your Token').x / 2)
+            imgui.TextDisabled('Your Token')
+        end
+        if imgui.InputText('##id', settings.id, sizeof(settings.id)) then save() end
+        if #str(settings.id) == 0 then
+            imgui.SameLine(5 + 190 / 2 - imgui.CalcTextSize('Your Id').x / 2)
+            imgui.TextDisabled('Your Id')
+        end
+        imgui.PopItemWidth()
+        imgui.SetCursorPosX(5 + 190 / 2 - 60 / 2)
+        imgui.SetCursorPosY(70)
+        if imgui.Button(fa.ICON_FA_CHECK, imgui.ImVec2(60, 23)) then
+            settings.tgWindow[0] = false
+            settings.renderWindow = true
+        end
+    end)
+
+function imgui.DarkTheme() -- by chapo
+    imgui.SwitchContext()
+    --==[ STYLE ]==--
+    imgui.GetStyle().WindowPadding = imgui.ImVec2(5, 5)
+    imgui.GetStyle().FramePadding = imgui.ImVec2(5, 5)
+    imgui.GetStyle().ItemSpacing = imgui.ImVec2(5, 5)
+    imgui.GetStyle().ItemInnerSpacing = imgui.ImVec2(2, 2)
+    imgui.GetStyle().TouchExtraPadding = imgui.ImVec2(0, 0)
+    imgui.GetStyle().IndentSpacing = 0
+    imgui.GetStyle().ScrollbarSize = 10
+    imgui.GetStyle().GrabMinSize = 10
+
+    --==[ BORDER ]==--
+    imgui.GetStyle().WindowBorderSize = 0
+    imgui.GetStyle().ChildBorderSize = 0
+    imgui.GetStyle().PopupBorderSize = 0
+    imgui.GetStyle().FrameBorderSize = 1
+    imgui.GetStyle().TabBorderSize = 0
+
+    --==[ ROUNDING ]==--
+    imgui.GetStyle().WindowRounding = 0
+    imgui.GetStyle().ChildRounding = 4
+    imgui.GetStyle().FrameRounding = 5
+    imgui.GetStyle().PopupRounding = 5
+    imgui.GetStyle().ScrollbarRounding = 5
+    imgui.GetStyle().GrabRounding = 5
+    imgui.GetStyle().TabRounding = 5
+
+    --==[ ALIGN ]==--
+    imgui.GetStyle().WindowTitleAlign = imgui.ImVec2(0.5, 0.5)
+    imgui.GetStyle().ButtonTextAlign = imgui.ImVec2(0.5, 0.5)
+    imgui.GetStyle().SelectableTextAlign = imgui.ImVec2(0.5, 0.5)
+
+    --==[ COLORS ]==--
+    imgui.GetStyle().Colors[imgui.Col.Text]                  = imgui.ImVec4(1.00, 1.00, 1.00, 1.00)
+    imgui.GetStyle().Colors[imgui.Col.TextDisabled]          = imgui.ImVec4(0.50, 0.50, 0.50, 1.00)
+    imgui.GetStyle().Colors[imgui.Col.WindowBg]              = imgui.ImVec4(0.07, 0.07, 0.07, 1.00)
+    imgui.GetStyle().Colors[imgui.Col.ChildBg]               = imgui.ImVec4(0.07, 0.07, 0.07, 1.00)
+    imgui.GetStyle().Colors[imgui.Col.PopupBg]               = imgui.ImVec4(0.07, 0.07, 0.07, 1.00)
+    imgui.GetStyle().Colors[imgui.Col.Border]                = imgui.ImVec4(0.25, 0.25, 0.26, 0.54)
+    imgui.GetStyle().Colors[imgui.Col.BorderShadow]          = imgui.ImVec4(0.00, 0.00, 0.00, 0.00)
+    imgui.GetStyle().Colors[imgui.Col.FrameBg]               = imgui.ImVec4(0.12, 0.12, 0.12, 1.00)
+    imgui.GetStyle().Colors[imgui.Col.FrameBgHovered]        = imgui.ImVec4(0.25, 0.25, 0.26, 1.00)
+    imgui.GetStyle().Colors[imgui.Col.FrameBgActive]         = imgui.ImVec4(0.25, 0.25, 0.26, 1.00)
+    imgui.GetStyle().Colors[imgui.Col.TitleBg]               = imgui.ImVec4(0.12, 0.12, 0.12, 1.00)
+    imgui.GetStyle().Colors[imgui.Col.TitleBgActive]         = imgui.ImVec4(0.12, 0.12, 0.12, 1.00)
+    imgui.GetStyle().Colors[imgui.Col.TitleBgCollapsed]      = imgui.ImVec4(0.12, 0.12, 0.12, 1.00)
+    imgui.GetStyle().Colors[imgui.Col.MenuBarBg]             = imgui.ImVec4(0.12, 0.12, 0.12, 1.00)
+    imgui.GetStyle().Colors[imgui.Col.ScrollbarBg]           = imgui.ImVec4(0.12, 0.12, 0.12, 1.00)
+    imgui.GetStyle().Colors[imgui.Col.ScrollbarGrab]         = imgui.ImVec4(0.00, 0.00, 0.00, 1.00)
+    imgui.GetStyle().Colors[imgui.Col.ScrollbarGrabHovered]  = imgui.ImVec4(0.41, 0.41, 0.41, 1.00)
+    imgui.GetStyle().Colors[imgui.Col.ScrollbarGrabActive]   = imgui.ImVec4(0.51, 0.51, 0.51, 1.00)
+    imgui.GetStyle().Colors[imgui.Col.CheckMark]             = imgui.ImVec4(1.00, 1.00, 1.00, 1.00)
+    imgui.GetStyle().Colors[imgui.Col.SliderGrab]            = imgui.ImVec4(0.21, 0.20, 0.20, 1.00)
+    imgui.GetStyle().Colors[imgui.Col.SliderGrabActive]      = imgui.ImVec4(0.21, 0.20, 0.20, 1.00)
+    imgui.GetStyle().Colors[imgui.Col.Button]                = imgui.ImVec4(0.12, 0.12, 0.12, 1.00)
+    imgui.GetStyle().Colors[imgui.Col.ButtonHovered]         = imgui.ImVec4(0.21, 0.20, 0.20, 1.00)
+    imgui.GetStyle().Colors[imgui.Col.ButtonActive]          = imgui.ImVec4(0.41, 0.41, 0.41, 1.00)
+    imgui.GetStyle().Colors[imgui.Col.Header]                = imgui.ImVec4(0.12, 0.12, 0.12, 1.00)
+    imgui.GetStyle().Colors[imgui.Col.HeaderHovered]         = imgui.ImVec4(0.20, 0.20, 0.20, 1.00)
+    imgui.GetStyle().Colors[imgui.Col.HeaderActive]          = imgui.ImVec4(0.47, 0.47, 0.47, 1.00)
+    imgui.GetStyle().Colors[imgui.Col.Separator]             = imgui.ImVec4(0.12, 0.12, 0.12, 1.00)
+    imgui.GetStyle().Colors[imgui.Col.SeparatorHovered]      = imgui.ImVec4(0.12, 0.12, 0.12, 1.00)
+    imgui.GetStyle().Colors[imgui.Col.SeparatorActive]       = imgui.ImVec4(0.12, 0.12, 0.12, 1.00)
+    imgui.GetStyle().Colors[imgui.Col.ResizeGrip]            = imgui.ImVec4(1.00, 1.00, 1.00, 0.25)
+    imgui.GetStyle().Colors[imgui.Col.ResizeGripHovered]     = imgui.ImVec4(1.00, 1.00, 1.00, 0.67)
+    imgui.GetStyle().Colors[imgui.Col.ResizeGripActive]      = imgui.ImVec4(1.00, 1.00, 1.00, 0.95)
+    imgui.GetStyle().Colors[imgui.Col.Tab]                   = imgui.ImVec4(0.12, 0.12, 0.12, 1.00)
+    imgui.GetStyle().Colors[imgui.Col.TabHovered]            = imgui.ImVec4(0.28, 0.28, 0.28, 1.00)
+    imgui.GetStyle().Colors[imgui.Col.TabActive]             = imgui.ImVec4(0.30, 0.30, 0.30, 1.00)
+    imgui.GetStyle().Colors[imgui.Col.TabUnfocused]          = imgui.ImVec4(0.07, 0.10, 0.15, 0.97)
+    imgui.GetStyle().Colors[imgui.Col.TabUnfocusedActive]    = imgui.ImVec4(0.14, 0.26, 0.42, 1.00)
+    imgui.GetStyle().Colors[imgui.Col.PlotLines]             = imgui.ImVec4(0.61, 0.61, 0.61, 1.00)
+    imgui.GetStyle().Colors[imgui.Col.PlotLinesHovered]      = imgui.ImVec4(1.00, 0.43, 0.35, 1.00)
+    imgui.GetStyle().Colors[imgui.Col.PlotHistogram]         = imgui.ImVec4(0.90, 0.70, 0.00, 1.00)
+    imgui.GetStyle().Colors[imgui.Col.PlotHistogramHovered]  = imgui.ImVec4(1.00, 0.60, 0.00, 1.00)
+    imgui.GetStyle().Colors[imgui.Col.TextSelectedBg]        = imgui.ImVec4(1.00, 0.00, 0.00, 0.35)
+    imgui.GetStyle().Colors[imgui.Col.DragDropTarget]        = imgui.ImVec4(1.00, 1.00, 0.00, 0.90)
+    imgui.GetStyle().Colors[imgui.Col.NavHighlight]          = imgui.ImVec4(0.26, 0.59, 0.98, 1.00)
+    imgui.GetStyle().Colors[imgui.Col.NavWindowingHighlight] = imgui.ImVec4(1.00, 1.00, 1.00, 0.70)
+    imgui.GetStyle().Colors[imgui.Col.NavWindowingDimBg]     = imgui.ImVec4(0.80, 0.80, 0.80, 0.20)
+    imgui.GetStyle().Colors[imgui.Col.ModalWindowDimBg]      = imgui.ImVec4(0.00, 0.00, 0.00, 0.70)
 end
