@@ -243,8 +243,10 @@ function getStats()
 end
 
 function checkHoursInOrganization()
+    local result = -1;
     sampSendChat('/wbook')
     wbook = true;
+    return result;
 end
 
 function separator(n)
@@ -252,6 +254,7 @@ function separator(n)
     local left, num, right = string.match(n, '^([^%d]*%d)(%d*)(.-)$')
     return left .. (num:reverse():gsub('(%d%d%d)', '%1,'):reverse()) .. right
 end
+
 
 function sampev.onShowTextDraw(id, data)
     -------------------------------------------СУНДУКИ-------------------------------------------
@@ -300,10 +303,6 @@ function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
     
     if dialogId == 32 and roulettes then
         sampSendDialogResponse(dialogId, 0, -1, -1)
-        lua_thread.create(function ()
-            wait(200)
-            sampCloseCurrentDialogWithButton(0)
-        end)
     end
     if dialogId == 235 then
         for line in text:gmatch("[^\n]+") do
@@ -336,20 +335,15 @@ function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
                 sNotif = sNotif..'\nДепозит счёт: '..separator(deposite)
             end
         end
-        --return false
     end
     if stats then
         stats = false
         bot:sendMessage{chat_id = ChatId, text = u8(sNotif)}
-        lua_thread.create(function ()
-            wait(500)
-            sampCloseCurrentDialogWithButton(0)
-        end)
+        sampSendDialogResponse(0, 1, 0, -1)
     end
 
     if dialogId == 0 and text:find('Удача!') then
         sampSendDialogResponse(0, 1, 0, -1)
-        return false
     end
 
     if dialogId == 25228 and wbook then
@@ -361,12 +355,6 @@ function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
             bot:sendMessage{chat_id = ChatId, text = u8('Во фракции отыграно '..hours..' часов')}
         end
         wbook = false
-        lua_thread.create(function ()
-            wait(500)
-            sampCloseCurrentDialogWithButton(0)
-            wait(500)
-            sampCloseCurrentDialogWithButton(0)
-        end)
     end
 end
 
@@ -376,10 +364,6 @@ function sampev.onServerMessage(color, text)
     end
     if text:find('_____Банковский чек_____') then
         pdNotif = '-PayDay-'
-        lua_thread.create(function()
-            wait(2000)
-            bot:sendMessage{chat_id = ChatId, text = u8(pdNotif)}
-        end)
     end
     if text:find('Депозит в банке: $(%d+)') then
         n_alldeppd = text:match('Депозит в банке: $(%d+)')
@@ -400,9 +384,10 @@ function sampev.onServerMessage(color, text)
     if text:find('В данный момент у вас (%d+)-й уровень и (%d+/%d+) респектов') then
         n_lvl, n_exp = text:match('В данный момент у вас (%d+)-й уровень и (%d+/%d+) респектов')
         pdNotif = pdNotif..'\nУровень: '..n_lvl..'. Уважение: '..n_exp
+        bot:sendMessage{chat_id = ChatId, text = u8(pdNotif)}
     end
     if text:find('Вы отыграли только %d+ минут без АФК!') then
-        sendTelegramNotification('Пэйдэй не был получен, '..text)
+        bot:sendMessage{chat_id = ChatId, text = u8'Пэйдэй не был получен, '..text}
     end
 
     if roulettes then
@@ -436,51 +421,40 @@ function sampev.onServerMessage(color, text)
     end
 end
 
--- function sampGetGunNameById(arg)
---     --TODO: переделать
---     if arg == 0 then return 'кулака'
---     elseif arg == 1 then return 'кастета'
---     elseif arg == 2 then return 'клюшки для гольфа'
---     elseif arg == 3 then return 'полицейской дубинки'
---     elseif arg == 4 then return 'ножа'
---     elseif arg == 5 then return 'бейсбольной биты'
---     elseif arg == 6 then return 'лопаты'
---     elseif arg == 7 then return 'кия'
---     elseif arg == 8 then return 'катаны'
---     elseif arg == 10 or arg == 11 then return 'дилдо'
---     elseif arg == 12 or arg == 13 then return 'вибратора'
---     elseif arg == 14 then return 'букета цветов'
---     elseif arg == 15 then return 'трости'
---     elseif arg == 16 then return 'гранаты'
---     elseif arg == 17 then return 'слезоточивого газа'
---     elseif arg == 18 then return 'коктейля молотова'
---     elseif arg == 22 then return 'пистолета 9мм'
---     elseif arg == 23 then return 'пистолета 9мм с глушителем'
---     elseif arg == 24 then return 'пистолета Desert Eagle'
---     elseif arg == 25 then return 'дробовика'
---     elseif arg == 26 then return 'обреза'
---     elseif arg == 27 then return 'скорострельного дробовика'
---     elseif arg == 28 then return 'узи'
---     elseif arg == 29 then return 'MP5'
---     elseif arg == 30 then return 'автомата Калашникова'
---     elseif arg == 31 then return 'винтовки М4'
---     elseif arg == 32 then return 'винтовки Rifle'
---     elseif arg == 33 then return 'снайперской винтовки'
---     elseif arg == 35 then return 'РПГ'
---     elseif arg == 36 then return 'самонаводящейся ракеты'
---     elseif arg == 37 then return 'огнемёта'
---     elseif arg == 38 then return 'минигана'
---     elseif arg == 39 then return 'кулака'
---     elseif arg == 40 then return 'сумки с тротилом'
---     elseif arg == 41 then return 'баллончика краски'
---     elseif arg == 42 then return 'огнетушителя'
---     elseif arg == 43 then return 'кулака'
---     elseif arg == 44 then return 'кулака'
---     elseif arg == 45 then return 'кулака'
---     elseif arg == 46 then return 'кулака'
---     else return false
+-- function sampev.onSendTakeDamage(playerId, damage, weapon, bodypart)
+--     local res, id = sampGetPlayerIdByCharHandle(PLAYER_PED)
+--     if ini.logs.damageN then
+--         if playerId <= 999 and weapon <= 47 and weapon ~= 34 then
+--             lua_thread.create(function()
+--                 wait(100)
+--                 bot:sendMessage{chat_id = ChatId, text = u8('Игрок '..sampGetPlayerNickname(playerId)..'  нанёс вам урон при помощи  '..sampGetGunNameById(weapon)..'.\nОсталось '..sampGetPlayerHealth(id)..' hp.')}
+--             end)
+--         elseif sampGetGamestate() == 3 then
+--         lua_thread.create(function()
+--                 wait(100)
+--                 bot:sendMessage{chat_id = ChatId, text = u8('Был получен урон.\nОсталось '..sampGetPlayerHealth(id)..' hp.')}
+--             end)
+--         else
+--             return false
+--         end
 --     end
 -- end
+
+function sampGetGunNameById(arg)
+    gunList = {
+        'Кулак', 'Кастет', 'Клюшка для гольфа', 'Полицейская дубинка', 'Нож',
+        'Бейсбольная бита', 'Лопата', 'Кий', 'Катана', 'Бензопила', 'Дилдо', 
+        'Дилдо', 'Вибратор', 'Вибратор', 'Букет цветов', 'Трость', 'Граната',
+        'Слезоточивый газ', 'Коктейль Молотова', 'Пистолет 9мм',
+        'Пистолет 9мм с глушителем', 'Пистолет Дезерт Игл', 'Обычный дробовик', 
+        'Обрез', 'Скорострельный дробовик', 'Узи', 'MP5', 'Автомат Калашникова',
+        'Винтовка M4', 'Tec-9', 'Охотничье ружьё', 'Снайперская винтовка', 'РПГ', 
+        'Самонаводящиеся ракеты HS', 'Огнемет', 'Миниган', 'Сумка с тротилом', 
+        'Детонатор к сумке', 'Баллончик с краской', 'Огнетушитель', 'Фотоаппарат',
+        'Прибор ночного видения', 'Тепловизор', 'Парашют'
+    }
+    return gunlist[arg]
+end
 
 function save()
     ini.tg.id = u8:decode(str(settings.id))
