@@ -190,6 +190,9 @@ function separator(n)
     return left .. (num:reverse():gsub('(%d%d%d)', '%1,'):reverse()) .. right
 end
 
+function afterReload()
+    bot:sendMessage{chat_id = tonumber(ini.tg.id), text = u8("—крипт был перезагружен после краша")}
+end
 
 function sampev.onShowTextDraw(id, data)
     -------------------------------------------—”Ќƒ” »-------------------------------------------
