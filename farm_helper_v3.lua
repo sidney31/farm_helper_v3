@@ -68,6 +68,7 @@ local tls, tlstime = 0, 0
 local use = 0
 local close = 0
 local wbook = false;
+local chatTranslate = false;
 
 local resX, resY = getScreenResolution()
 
@@ -81,6 +82,7 @@ bot:on('message', function(message)
             keyboard = {
                 { { text = u8('Открыть сундуки') }, {text=u8('Часов в организации')} },
                 { { text = u8('Статистика') }, { text = u8('Действия с сервером') } },
+                { { text = u8('Включить/выключить трансляцию чата') } },
             }
         }}
     elseif message.text == u8('Открыть сундуки') then
@@ -95,6 +97,10 @@ bot:on('message', function(message)
         }}
     elseif message.text == u8('Часов в организации') then
         checkHoursInOrganization()
+    elseif message.text == u8('Включить/выключить трансляцию чата') then
+        changeStateOfChatTranslate()
+    elseif chatTranslate then
+        sampSendChat(u8:decode(message.text))
     else
         bot:sendMessage{chat_id = tonumber(ini.tg.id), text = u8('Неизвестная команда')}
     end
@@ -107,8 +113,15 @@ bot:on('callback_query', function(query)
     elseif query.data == 'quit' then
         sampProcessChatInput('/q')
         bot:sendMessage{chat_id = tonumber(ini.tg.id), text = u8('Игра закрыта')}
+    elseif query.data == 'chatTranslate' then
+        changeStateOfChatTranslate()
     end
 end)
+
+function changeStateOfChatTranslate()
+    chatTranslate = not chatTranslate
+    bot:sendMessage{chat_id = tonumber(ini.tg.id), text = u8('Трансляция чата '..(chatTranslate and 'включена' or 'выключена')..', следующие ваши сообщения '..(chatTranslate and 'будут' or 'не будут')..' отправлены в игровой чат')}
+end
 
 function openKeys()
     roulettes = true
@@ -272,9 +285,14 @@ function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
 end
 
 function sampev.onServerMessage(color, text)
+    if chatTranslate then
+        bot:sendMessage{chat_id = tonumber(ini.tg.id), text = u8(text)}
+    end
+
     if text:find('Добро пожаловать на Arizona Role Play!')  then
         bot:sendMessage{chat_id = tonumber(ini.tg.id), text = u8('Вы присоеденились к серверу!')}
     end
+
     if text:find('_____Банковский чек_____') then
         pdNotif = '-PayDay-'
     end
@@ -337,14 +355,18 @@ end
 function sampev.onSendTakeDamage(playerId, damage, weapon, bodypart)
     local id = select(2, sampGetPlayerIdByCharHandle(PLAYER_PED))
     if playerId <= 999 then
-        bot:sendMessage{chat_id = tonumber(ini.tg.id), text = u8('Получен урон от '..sampGetPlayerNickname(playerId)..'\nОсталось '..sampGetPlayerHealth(id)..' единиц здоровья')}
+        bot:sendMessage{chat_id = tonumber(ini.tg.id), text = u8('Получен урон от '..sampGetPlayerNickname(playerId)..', при помощи '..sampGetGunNameById(weapon)..'\nОсталось '..sampGetPlayerHealth(id)..' единиц здоровья'), reply_markup = {
+            inline_keyboard = {
+                { { text = u8((chatTranslate and 'Выключить' or 'Включить')..' трансляцию чата'), callback_data = 'chatTranslate' } },
+            }
+        }}
     else
         bot:sendMessage{chat_id = tonumber(ini.tg.id), text = u8('Получен неизвестный урон. Осталось '..sampGetPlayerHealth(id)..' единиц здоровья')}
     end
 end
 
 function sampGetGunNameById(arg)
-    gunList = {
+    local gunList = {
         'Кулак', 'Кастет', 'Клюшка для гольфа', 'Полицейская дубинка', 'Нож',
         'Бейсбольная бита', 'Лопата', 'Кий', 'Катана', 'Бензопила', 'Дилдо', 
         'Дилдо', 'Вибратор', 'Вибратор', 'Букет цветов', 'Трость', 'Граната',
@@ -356,7 +378,7 @@ function sampGetGunNameById(arg)
         'Детонатор к сумке', 'Баллончик с краской', 'Огнетушитель', 'Фотоаппарат',
         'Прибор ночного видения', 'Тепловизор', 'Парашют'
     }
-    return gunlist[arg]
+    return gunList[arg+1]
 end
 
 function save()
