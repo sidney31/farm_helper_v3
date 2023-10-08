@@ -745,9 +745,8 @@ function autoupdate(json_url, prefix, url)
                         if updateversion ~= thisScript().version then
                             lua_thread.create(function(prefix)
                                 local dlstatus = require('moonloader').download_status
-                                sampAddChatMessage(
-                                ('{5BCEFA}[AFK-FARM HELPER] {FFFFFF}Обнаружено обновление. Текущая версия: ' .. thisScript().version .. ', последняя версия ' .. updateversion),
-                                    -1)
+                                sampAddChatMessage('{5BCEFA}[AFK-FARM HELPER] {FFFFFF}Обнаружено обновление. Текущая версия: ' .. thisScript().version .. ', последняя версия ' .. updateversion, -1)
+                                bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('Обнаружено обновление. Текущая версия: ' .. thisScript().version .. ', последняя версия ' .. updateversion)}
                                 wait(250)
                                 downloadUrlToFile(updatelink, thisScript().path,
                                     function(id3, status1, p13, p23)
@@ -755,8 +754,7 @@ function autoupdate(json_url, prefix, url)
                                             print(string.format('Загружено %d из %d.', p13, p23))
                                         elseif status1 == dlstatus.STATUS_ENDDOWNLOADDATA then
                                             print('Загрузка обновления завершена.')
-                                            sampAddChatMessage('{5BCEFA}[AFK-FARM HELPER] {FFFFFF}Обновление завершено!',
-                                                -1)
+                                            bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('Обновление завершено!')}
                                             goupdatestatus = true
                                             lua_thread.create(function()
                                                 wait(500)
@@ -765,16 +763,14 @@ function autoupdate(json_url, prefix, url)
                                         end
                                         if status1 == dlstatus.STATUSEX_ENDDOWNLOAD then
                                             if goupdatestatus == nil then
-                                                sampAddChatMessage(
-                                                ('{5BCEFA}[AFK-FARM HELPER] {FFFFFF}Обновление прошло неудачно. Запущена старая версия'),
-                                                    -1)
+                                                sampAddChatMessage('{5BCEFA}[AFK-FARM HELPER] {FFFFFF}Обновление не удалось. Запущена старая версия.', -1)
+                                                bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('Обновление не удалось. Запущена старая версия.')}
                                                 update = false
                                             end
                                         end
                                     end
                                 )
-                            end, prefix
-                            )
+                            end, prefix)
                         else
                             update = false
                             sampAddChatMessage('{5BCEFA}[AFK-FARM HELPER] {FFFFFF}Обновление не требуется.', -1)
