@@ -172,6 +172,7 @@ function openKeys()
 end
 
 function getStats()
+    sNotif = ''
     sampSendChat('/stats')
     stats = true
 end
@@ -396,6 +397,11 @@ function main()
     sampRegisterChatCommand('tg', function ()
         settings.renderWindow = not settings.renderWindow
     end)
+    if (thisScript().name ~= 'farm_helper_v3.lua') then
+        sampShowDialog(333, 'Ошибка', '{FFFFFF}Скрипт был переименован. Верните название {FF0000}"farm_helper_v3.lua" {FFFFFF}' ,'Закрыть', _,0)
+        thisScript():unload()
+
+    end
     while true do
         wait(0)
         if os.date("%H %M") == "5 3" and sampGetGamestate() == 3 then
