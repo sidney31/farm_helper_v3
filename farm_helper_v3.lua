@@ -85,7 +85,7 @@ bot:on('message', function(message)
             keyboard = {
                 { { text = u8('Открыть сундуки') }, { text = u8('Часов в организации') } },
                 { { text = u8('Статистика') }, { text = u8('Действия с сервером') } },
-                { { text = u8('Включить/выключить трансляцию чата') } },
+                { { text = u8('Включить/выключить трансляцию чата') }, {text = u8('Проверить на наличие обновления')} },
             }
         } }
     elseif message.text == u8('Открыть сундуки') then
@@ -103,6 +103,10 @@ bot:on('message', function(message)
         checkHoursInOrganization()
     elseif message.text == u8('Включить/выключить трансляцию чата') then
         changeStateOfChatTranslate()
+    elseif message.text == u8('Проверить на наличие обновления') then
+        autoupdate("https://raw.githubusercontent.com/sidney31/farm_helper_v3/main/update.json",
+        '[' .. string.upper(thisScript().name) .. ']: ',
+        "https://raw.githubusercontent.com/sidney31/farm_helper_v3/main/farm_helper_v3.lua")
     elseif chatTranslate then
         sampSendChat(u8:decode(message.text))
     else
