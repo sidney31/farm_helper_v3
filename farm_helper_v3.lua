@@ -778,10 +778,12 @@ function autoupdate(json_url, prefix, url)
                         else
                             update = false
                             sampAddChatMessage('{5BCEFA}[AFK-FARM HELPER] {FFFFFF}Обновление не требуется.', -1)
+                            bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('Обновление не требуется.')}
                         end
                     end
                 else
                     sampAddChatMessage('{5BCEFA}[AFK-FARM HELPER] {FFFFFF}Не удалось проверить обновление.', -1)
+                    bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('Не удалось проверить обновление.')}
                     update = false
                 end
             end
