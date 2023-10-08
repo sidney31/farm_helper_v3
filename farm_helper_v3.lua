@@ -248,13 +248,17 @@ function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
                 exp = line:match('Уважение: %{......%}%[(%d+/%d+)%]')
                 sNotif = sNotif..'\nУважение: '..exp
             end
-            if line:find('Деньги: %{......%}%[($%d+)%]') then
-                money = line:match('Деньги: %{......%}%[($%d+)%]')
+            if line:find('Наличные деньги %(SA$%): %{......%}%[($%d+)%]') then
+                money = line:match('Наличные деньги %(SA$%): %{......%}%[($%d+)%]')
                 sNotif = sNotif..'\nДеньги на руках: '..separator(money)
+            end
+            if line:find('Наличные деньги %(VC$%): %{......%}%[($%d+)%]') then
+                money = line:match('Наличные деньги %(VC$%): %{......%}%[($%d+)%]')
+                sNotif = sNotif..'\nДеньги на руках: '..separator(money)..' SA$'
             end
             if line:find('Деньги в банке: %{......%}%[($%d+)%]') then
                 bank = line:match('Деньги в банке: %{......%}%[($%d+)%]')
-                sNotif = sNotif..'\nДеньги в банке: '..separator(bank)
+                sNotif = sNotif..'\nДеньги в банке: '..separator(bank)..' VC$'
             end
             if line:find('Деньги на депозите: %{......%}%[($%d+)%]') then
                 deposite = line:match('Деньги на депозите: %{......%}%[($%d+)%]')
@@ -387,7 +391,7 @@ function save()
     inicfg.save(ini, directIni)
 end
 
-function main()
+function main() 
     while not isSampAvailable() do wait(0) end
     sampRegisterChatCommand('tg', function ()
         settings.renderWindow = not settings.renderWindow
@@ -395,7 +399,7 @@ function main()
     while true do
         wait(0)
         if os.date("%H %M") == "5 3" and sampGetGamestate() == 3 then
-            bot:sendMessage{chat_id = tonumber(ini.tg.id), text = u8('До рестарта несколько минут, ухожу в релог на 10 минут (/rec 600)')}
+            bot:sendMessage{chat_id = tonumber(ini.tg.id), text = u8('До рестарта несколько минут, игра будет перезапущена через 10 минут (/rec 600)')}
             sampSendChat('/rec 600')
         end
     end
@@ -430,13 +434,13 @@ imgui.OnFrame(function() return settings.renderWindow end,
         imgui.PushStyleColor(imgui.Col.Border, imgui.ImVec4(0.25, 0.25, 0.26, 0.0))
         imgui.PushStyleColor(imgui.Col.ButtonHovered, imgui.ImVec4(0.25, 0.25, 0.26, 0.0))
         imgui.PushStyleColor(imgui.Col.ButtonActive, imgui.ImVec4(0.25, 0.25, 0.26, 0.0))
-        if imgui.Button('##AFK-FARM HELPER', imgui.ImVec2(240, 30)) then
+        if imgui.Button('##AFK-FARMING HELPER', imgui.ImVec2(240, 30)) then
             tab = nil
         end
         imgui.SameLine()
         imgui.SetCursorPosX(5)
         imgui.SetCursorPosY(-5)
-        imgui.Text('AFK-FARM HELPER')
+        imgui.Text('AFK-FARMING HELPER')
         imgui.PopStyleColor(4)
         imgui.PopFont()
         imgui.SameLine()
@@ -499,10 +503,10 @@ imgui.OnFrame(function() return settings.renderWindow end,
             imgui.PopFont()
             imgui.TextColored(imgui.ImVec4(0.9, 0.9, 0.9, 1.0), u8 'Id – это уникальный идентификатор вашего профиля.\nДля получения id необходимо найти бота @my_id_bot\nи написать ему /start. Затем вы увидете сообщение\nс вашим id. Копируем и вставляем в настройки.')
             imgui.Separator()
-            imgui.SetCursorPosX(183)
-            imgui.TextDisabled(u8 '\nАвторы: Sidney31, Sandro;')
+            imgui.SetCursorPosX(243)
+            imgui.TextDisabled(u8 '\nАвтор: Sidney31')
             imgui.SetCursorPosX(264)
-            imgui.TextDisabled(u8 'Версия: 0.1;')
+            imgui.TextDisabled(u8 'Версия: 3.0;')
             imgui.EndChild()
         end
         -- if tab == 1 then
