@@ -11,6 +11,24 @@
 sandro
 ]]
 
+script_name("farm_helper_v3.lua")
+script_version("09.10.2023")
+
+local enable_autoupdate = true
+local autoupdate_loaded = false
+local Update = nil
+if enable_autoupdate then
+    local updater_loaded, Updater = pcall(loadstring)
+    if updater_loaded then
+        autoupdate_loaded, Update = pcall(Updater)
+        if autoupdate_loaded then
+            Update.json_url = "https://raw.githubusercontent.com/sidney31/farm_helper_v3/main/update.json" .. tostring(os.clock())
+            Update.prefix = "[" .. string.upper(thisScript().name) .. "]: "
+            Update.url = "https://github.com/qrlk/moonloader-script-updater/"
+        end
+    end
+end
+
 local Telegram = require('dolbogram')
 local encoding = require('encoding')
 encoding.default = 'CP1251'
@@ -129,45 +147,22 @@ function openKeys()
     wait(200)
     sampSendDialogResponse(32, 0, -1, 123)
     wait(300)
-    if sampTextdrawIsExists(close) then 
+    
+    if sampTextdrawIsExists(close) then
         sampSendClickTextdraw(close)
     end
+
     wait(300)
     sampSendChat('/invent')
-    sampAddChatMessage('invent', -1)
-    wait(500)
-    if ini.boxes.box then
-        sampSendClickTextdraw(box)
+
+    local boxes={box, pbox, dbox, tmask, tls}
+
+    for i = 1, #boxes, 1 do
+        wait(500)
+        sampSendClickTextdraw(boxes[i])
         wait(500)
         sampSendClickTextdraw(use + 1)
     end
-    wait(500)
-    if ini.boxes.pbox then
-        sampSendClickTextdraw(pbox)
-        wait(500)
-        sampSendClickTextdraw(use + 1)
-    end
-    wait(500)
-    if ini.boxes.dbox then
-        sampSendClickTextdraw(dbox)
-        wait(500)
-        sampSendClickTextdraw(use + 1)
-    end
-    wait(500)
-    if ini.boxes.tmask then
-        sampSendClickTextdraw(tmask)
-        wait(500)
-        sampSendClickTextdraw(use + 1)
-    end
-    wait(500)
-    if ini.boxes.tls then
-        sampSendClickTextdraw(tls)
-        wait(500)
-        sampSendClickTextdraw(use + 1)
-    end
-    wait(500)
-    sampSendClickTextdraw(close)
-    wait(500)
     roulettes = false
 end
 
@@ -389,26 +384,6 @@ function save()
     ini.tg.id = u8:decode(str(settings.id))
     ini.tg.token = u8:decode(str(settings.token))
     inicfg.save(ini, directIni)
-end
-
-function main() 
-    while not isSampAvailable() do wait(0) end
-    sampRegisterChatCommand('tg', function ()
-        settings.renderWindow = not settings.renderWindow
-    end)
-    if (thisScript().name ~= 'farm_helper_v3.lua') then
-        sampShowDialog(333, 'Ошибка', '{FFFFFF}Скрипт был переименован. Верните название {FF0000}"farm_helper_v3.lua" {FFFFFF}' ,'Закрыть', _,0)
-        thisScript():unload()
-
-    end
-    while true do
-        wait(0)
-        if os.date("%H %M") == "5 3" and sampGetGamestate() == 3 then
-            bot:sendMessage{chat_id = tonumber(ini.tg.id), text = u8('До рестарта несколько минут, игра будет перезапущена через 10 минут (/rec 600)')}
-            sampSendChat('/rec 600')
-        end
-    end
-
 end
 
 imgui.OnInitialize(function()
@@ -702,4 +677,32 @@ function imgui.DarkTheme() -- by chapo
     imgui.GetStyle().Colors[imgui.Col.NavWindowingHighlight] = imgui.ImVec4(1.00, 1.00, 1.00, 0.70)
     imgui.GetStyle().Colors[imgui.Col.NavWindowingDimBg]     = imgui.ImVec4(0.80, 0.80, 0.80, 0.20)
     imgui.GetStyle().Colors[imgui.Col.ModalWindowDimBg]      = imgui.ImVec4(0.00, 0.00, 0.00, 0.70)
+end
+
+function main() 
+    while not isSampAvailable() do wait(0) end
+    sampRegisterChatCommand('tg', function ()
+        settings.renderWindow = not settings.renderWindow
+    end)
+    
+    if (thisScript().name ~= 'farm_helper_v3.lua') then
+        sampShowDialog(333, 'Ошибка', '{FFFFFF}Скрипт был переименован. Верните название {FF0000}"farm_helper_v3.lua" {FFFFFF}' ,'Закрыть', _,0)
+        thisScript():unload()
+
+    end
+
+    if autoupdate_loaded and enable_autoupdate and Update then
+        pcall(Update.check, Update.json_url, Update.prefix, Update.url)
+    end
+
+    sampAddChatMessage("{5BCEFA}[AFK-FARM HELPER] {FFFFFF}Успешно загружен. {5BCEFA}Активация: /tg", -1)
+    
+    while true do
+        wait(0)
+        if os.date("%H %M") == "5 3" and sampGetGamestate() == 3 then
+            bot:sendMessage{chat_id = tonumber(ini.tg.id), text = u8('До рестарта несколько минут, игра будет перезапущена через 10 минут (/rec 600)')}
+            sampSendChat('/rec 600')
+        end
+    end
+
 end
