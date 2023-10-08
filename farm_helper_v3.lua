@@ -12,7 +12,7 @@ sandro
 ]]
 
 script_name("farm_helper_v3.lua")
-script_version("08.10.2023")
+script_version("09.10.2023")
 
 local Telegram = require('dolbogram')
 local encoding = require('encoding')
