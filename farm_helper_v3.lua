@@ -172,7 +172,7 @@ function openKeys()
 end
 
 function getStats()
-    sNotif = ''
+    sNotif ='-Статистика-\n'
     sampSendChat('/stats')
     stats = true
 end
