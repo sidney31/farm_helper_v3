@@ -354,7 +354,7 @@ end
 
 function sampev.onSendTakeDamage(playerId, damage, weapon, bodypart)
     local id = select(2, sampGetPlayerIdByCharHandle(PLAYER_PED))
-    if playerId <= 999 then
+    if playerId <= 999 and sampGetGamestate() == 3 then
         bot:sendMessage{chat_id = tonumber(ini.tg.id), text = u8('Получен урон от '..sampGetPlayerNickname(playerId)..', при помощи '..sampGetGunNameById(weapon)..'\nОсталось '..sampGetPlayerHealth(id)..' единиц здоровья'), reply_markup = {
             inline_keyboard = {
                 { { text = u8((chatTranslate and 'Выключить' or 'Включить')..' трансляцию чата'), callback_data = 'chatTranslate' } },
@@ -392,7 +392,14 @@ function main()
     sampRegisterChatCommand('tg', function ()
         settings.renderWindow = not settings.renderWindow
     end)
-    wait(0)
+    while true do
+        wait(0)
+        if os.date("%H %M") == "5 3" and sampGetGamestate() == 3 then
+            bot:sendMessage{chat_id = tonumber(ini.tg.id), text = u8('До рестарта несколько минут, ухожу в релог на 10 минут (/rec 600)')}
+            sampSendChat('/rec 600')
+        end
+    end
+
 end
 
 imgui.OnInitialize(function()
