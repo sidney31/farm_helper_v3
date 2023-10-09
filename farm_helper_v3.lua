@@ -12,7 +12,7 @@ sandro
 ]]
 
 script_name("farm_helper_v3.lua")
-script_version("10.10.2023")
+script_version("11.10.2023")
 
 local Telegram = require('dolbogram')
 local encoding = require('encoding')
@@ -723,7 +723,7 @@ function main()
 
     while true do
         wait(0)
-        if os.date("%H %M") == "5 3" and sampGetGamestate() == 3 then
+        if os.date("%H %M") == "5 1" and sampGetGamestate() == 3 then
             bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8(
             'До рестарта несколько минут, игра будет перезапущена через 10 минут (/rec 600)') }
             sampSendChat('/rec 600')
