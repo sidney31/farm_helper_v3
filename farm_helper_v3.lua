@@ -12,7 +12,7 @@ sandro
 ]]
 
 script_name("farm_helper_v3.lua")
-script_version("3.1.1")
+script_version("3.1.2")
 
 local Telegram = require('dolbogram')
 local encoding = require('encoding')
@@ -372,7 +372,7 @@ function sampev.onSendTakeDamage(playerId, damage, weapon, bodypart)
                     callback_data = 'chatTranslate' } },
             }
         } }
-    else
+    elseif damage > 5 then
         bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('Получен неизвестный урон. Осталось ' ..
         sampGetPlayerHealth(id) .. ' единиц здоровья') }
     end
