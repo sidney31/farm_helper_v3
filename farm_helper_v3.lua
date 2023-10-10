@@ -506,8 +506,8 @@ imgui.OnFrame(function() return settings.renderWindow end,
             imgui.Separator()
             imgui.SetCursorPosX(243)
             imgui.TextDisabled(u8 '\nАвтор: Sidney31')
-            imgui.SetCursorPosX(264)
-            imgui.TextDisabled(u8 'Версия: 3.0;')
+            imgui.SetCursorPosX(255)
+            imgui.TextDisabled(u8 'Версия: '..thisScript().version)
             imgui.EndChild()
         end
         -- if tab == 1 then
