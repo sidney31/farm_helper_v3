@@ -1,5 +1,5 @@
 {
-  "latest": "3.1.9",
+  "latest": "3.1.10",
   "updateurl": "https://raw.githubusercontent.com/sidney31/farm_helper_v3/main/farm_helper_v3.lua",
-  "changes": "Исправлено уведомления о покупке/продаже"
+  "changes": "Исправлено уведомления о покупке/продаже\nДобавлен вывод изменений в обновлении"
 }
