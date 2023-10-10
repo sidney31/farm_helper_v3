@@ -12,7 +12,7 @@ sandro
 ]]
 
 script_name("farm_helper_v3.lua")
-script_version("3.1.3")
+script_version("3.1.4")
 
 local Telegram = require('dolbogram')
 local encoding = require('encoding')
@@ -362,7 +362,7 @@ end
 
 function sampev.onSendTakeDamage(playerId, damage, weapon, bodypart)
     local id = select(2, sampGetPlayerIdByCharHandle(PLAYER_PED))
-    if playerId <= 999 and sampGetGamestate() == 3 then
+    if playerId <= 999 and sampGetGamestate() == 3 and playerId ~= -1 then
         bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('Получен урон от ' ..
         sampGetPlayerNickname(playerId) ..
         ', при помощи ' ..
@@ -756,8 +756,8 @@ function autoupdate(json_url, prefix, url)
                                         if status1 == dlstatus.STATUS_DOWNLOADINGDATA then
                                             print(string.format('Загружено %d из %d.', p13, p23))
                                         elseif status1 == dlstatus.STATUS_ENDDOWNLOADDATA then
-                                            print('Загрузка обновления завершена.')
-                                            bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('Обновление завершено!')}
+                                            sampAddChatMessage('{5BCEFA}[AFK-FARM HELPER] {FFFFFF}Загрузка обновления завершена.', -1)
+                                            bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('Обновление завершено.')}
                                             goupdatestatus = true
                                             lua_thread.create(function()
                                                 wait(500)
