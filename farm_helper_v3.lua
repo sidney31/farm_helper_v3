@@ -17,7 +17,7 @@ script_version("3.1.11")
 local Telegram = require('dolbogram')
 local encoding = require('encoding')
 encoding.default = 'CP1251'
-local u8 = encoding.UTF8        
+local u8 = encoding.UTF8    
 
 local fa = require("fAwesome5")
 local ffi = require('ffi')
@@ -244,7 +244,7 @@ function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
             end
             if line:find('Наличные деньги %(SA$%): %{......%}%[($%d+)%]') then
                 money = line:match('Наличные деньги %(SA$%): %{......%}%[($%d+)%]')
-                sNotif = sNotif .. '\nДеньги на руках: ' .. separator(money) .. 'SA$'
+                sNotif = sNotif .. '\nДеньги на руках: ' .. separator(money) .. ' SA$'
             end
             if line:find('Наличные деньги %(VC$%): %{......%}%[($%d+)%]') then
                 money = line:match('Наличные деньги %(VC$%): %{......%}%[($%d+)%]')
@@ -362,13 +362,13 @@ end
 
 function onReceivePacket(id)
 	local list_packets = {
-        [32] = {'Сервер закрыл соединение!'},
-		[33] = {'Соединение потеряно!'},
-		[34] = {'Вы подключились к серверу!'},
+        [32] = {u8'Сервер закрыл соединение!'},
+		[33] = {u8'Соединение потеряно!'},
+		[34] = {u8'Вы подключились к серверу!'},
     }
 	
 	if list_packets[id] then
-		bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8(list_packets[id]) }
+		bot:sendMessage { chat_id = tonumber(ini.tg.id), text = list_packets[id]}
 	end
 end
 
