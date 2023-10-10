@@ -343,14 +343,14 @@ function sampev.onServerMessage(color, text)
         end
     end
     if text:find('^%s*Вы купили (.+) у игрока (.+) за(.+)$(.+)') then
-        local item, lot, name, sum = text:match('^%s*Вы купили (.+) у игрока (.+) за(.+)$(.+)')
-        local text = 'Вы купили ' .. item .. '('..lot..' шт.), у игрока ' .. name .. ', на сумму: $'..sum
+        local item, name, sum = text:match('^%s*Вы купили (.+) у игрока (.+) за(.+)$(.+)')
+        local text = 'Вы купили ' .. item ..', у игрока ' .. name .. ', на сумму: $'..sum
         bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8(text) }
     end
 
     if text:find('^%s*(.+) купил у вас (.+), вы получили(.+)$(.+) от продажи %(комиссия %d+ процент%(а%)%)$') then
-        local name, item, lot, sum = text:match('^%s*(.+) купил у вас (.+), вы получили(.+)$(.+) от продажи %(комиссия %d+ процент%(а%)%)$')
-        local text = 'Вы продали ' .. item .. '('..lot..' шт.) игроку ' .. name .. ', на сумму: $'..sum
+        local name, item, sum = text:match('^%s*(.+) купил у вас (.+), вы получили(.+)$(.+) от продажи %(комиссия %d+ процент%(а%)%)$')
+        local text = 'Вы продали ' .. item .. ' игроку ' .. name .. ', на сумму: $'..sum
         bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8(text) }
     end
 
