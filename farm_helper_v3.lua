@@ -287,10 +287,6 @@ function sampev.onServerMessage(color, text)
         bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8(text) }
     end
 
-    if text:find('Добро пожаловать на Arizona Role Play!') then
-        bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('Вы присоеденились к серверу!') }
-    end
-
     if text:find('_____Банковский чек_____') then
         pdNotif = '-PayDay-'
         if os.date("%H") == 5 and sampGetGamestate() == 3 then
@@ -358,7 +354,24 @@ function sampev.onServerMessage(color, text)
         local text = 'Вы продали ' .. item .. '('..lot..' шт.) игроку ' .. name .. ', на сумму: $'..sum
         bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8(text) }
     end
+
+    if text:find('^%s*%(%( Через 30 секунд вы сможете сразу отправиться в больницу или подождать врачей %)%)%s*$') then
+        bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('Вы умерли ?') }
+	end
 end
+
+function onReceivePacket(id)
+	local list_packets = {
+        [32] = {'Сервер закрыл соединение!'},
+		[33] = {'Соединение потеряно!'},
+		[34] = {'Вы подключились к серверу!'},
+    }
+	
+	if list_packets[id] then
+		bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8(list_packets[id]) }
+	end
+end
+
 
 function sampev.onSendTakeDamage(playerId, damage, weapon, bodypart)
     local id = select(2, sampGetPlayerIdByCharHandle(PLAYER_PED))
