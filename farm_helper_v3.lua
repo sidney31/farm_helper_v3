@@ -12,12 +12,12 @@ sandro
 ]]
 
 script_name("farm_helper_v3.lua")
-script_version("3.1.10")
+script_version("3.1.11")
 
 local Telegram = require('dolbogram')
 local encoding = require('encoding')
 encoding.default = 'CP1251'
-local u8 = encoding.UTF8
+local u8 = encoding.UTF8        
 
 local fa = require("fAwesome5")
 local ffi = require('ffi')
@@ -771,7 +771,6 @@ function autoupdate(json_url, prefix, url)
                                         elseif status1 == dlstatus.STATUS_ENDDOWNLOADDATA then
                                             sampAddChatMessage('{5BCEFA}[AFK-FARM HELPER] {FFFFFF}Загрузка обновления завершена.', -1)
                                             bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('Обновление завершено.')}
-                                            bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('Изменения: '..info.changes)}
                                             goupdatestatus = true
                                             lua_thread.create(function()
                                                 wait(500)
