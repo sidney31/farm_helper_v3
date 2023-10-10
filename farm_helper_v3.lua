@@ -151,9 +151,9 @@ function openKeys()
     local boxes = { box, pbox, dbox, tmask, tls }
 
     for i = 1, #boxes, 1 do
-        wait(500)
+        wait(1000)
         sampSendClickTextdraw(boxes[i])
-        wait(500)
+        wait(1000)
         sampSendClickTextdraw(use + 1)
     end
     roulettes = false
@@ -293,6 +293,11 @@ function sampev.onServerMessage(color, text)
 
     if text:find('_____Банковский чек_____') then
         pdNotif = '-PayDay-'
+        if os.date("%H") == 5 and sampGetGamestate() == 3 then
+            bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8(
+            'Произошел рестарт, игра будет перезапущена через 10 минут (/rec 600)') }
+            sampSendChat('/rec 600')
+        end
     end
     if text:find('Депозит в банке: $(%d+)') then
         n_alldeppd = text:match('Депозит в банке: $(%d+)')
@@ -714,8 +719,7 @@ function main()
         pcall(Update.check, Update.json_url, Update.prefix, Update.url)
     end
 
-    sampAddChatMessage("{5BCEFA}[AFK-FARM HELPER] {FFFFFF}Успешно загружен. {5BCEFA}Активация: /tg",
-        -1)
+    sampAddChatMessage("{5BCEFA}[AFK-FARM HELPER] {FFFFFF}Успешно загружен. {5BCEFA}Активация: /tg", -1)
 
     autoupdate("https://raw.githubusercontent.com/sidney31/farm_helper_v3/main/update.json",
         '[' .. string.upper(thisScript().name) .. ']: ',
@@ -723,11 +727,6 @@ function main()
 
     while true do
         wait(0)
-        if os.date("%H %M") == "5 3" and sampGetGamestate() == 3 then
-            bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8(
-            'До рестарта несколько минут, игра будет перезапущена через 10 минут (/rec 600)') }
-            sampSendChat('/rec 600')
-        end
     end
 end
 
