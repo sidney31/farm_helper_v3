@@ -12,7 +12,7 @@ sandro
 ]]
 
 script_name("farm_helper_v3.lua")
-script_version("3.1.9")
+script_version("3.1.10")
 
 local Telegram = require('dolbogram')
 local encoding = require('encoding')
@@ -73,7 +73,6 @@ local close = 0
 local wbook = false;
 local chatTranslate = false;
 
-local changes = 'Изменений не обнаружено'
 
 local resX, resY = getScreenResolution()
 
@@ -123,8 +122,6 @@ bot:on('callback_query', function(query)
     elseif query.data == 'quit' then
         sampProcessChatInput('/q')
         bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('Игра закрыта') }
-    elseif query.data == 'changes' then
-        bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8(changes) }
     elseif query.data == 'chatTranslate' then
         changeStateOfChatTranslate()
     end
@@ -773,13 +770,8 @@ function autoupdate(json_url, prefix, url)
                                             print(string.format('Загружено %d из %d.', p13, p23))
                                         elseif status1 == dlstatus.STATUS_ENDDOWNLOADDATA then
                                             sampAddChatMessage('{5BCEFA}[AFK-FARM HELPER] {FFFFFF}Загрузка обновления завершена.', -1)
-                                            bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('Обновление завершено.'), reply_markup = {
-                                                inline_keyboard = {
-                                                    { { text = u8('Что нового?'), function ()
-                                                        bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8(info.changes)}
-                                                    end } },
-                                                }
-                                            } }
+                                            bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('Обновление завершено.')}
+                                            bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('Изменения: '..info.changes)}
                                             goupdatestatus = true
                                             lua_thread.create(function()
                                                 wait(500)
