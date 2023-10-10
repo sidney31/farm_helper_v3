@@ -12,7 +12,7 @@ sandro
 ]]
 
 script_name("farm_helper_v3.lua")
-script_version("3.1.4")
+script_version("3.1.5")
 
 local Telegram = require('dolbogram')
 local encoding = require('encoding')
@@ -346,15 +346,15 @@ function sampev.onServerMessage(color, text)
             out .. '.') }
         end
     end
-    if text:find('Вы купили (.+) %((%d+) шт%.%) у игрока (%w+_%w+) за $(%d+)') then
+    if text:find('Вы купили (.+) %((%d+) шт%.%) у игрока (%w+_%w+) за $(.+)') then
         local item, lot, name, sum = text:match('Вы купили (.+) %((%d+) шт%.%) у игрока (%w+_%w+) за $(%.+)')
         local text = 'Вы купили ' .. item .. '('..lot..' шт.), у игрока ' .. name .. ', на сумму: $'..sum
         bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8(text) }
     end
 
-    if text:find('(%w+_%w+) купил у вас (.+) %((%d+) шт%.%), вы получили $(%d+) от продажи %(комиссия %d* процент%(а%)%)') then
+    if text:find('(%w+_%w+) купил у вас (.+) %((%d+) шт%.%), вы получили $(.+) от продажи %(комиссия %d* процент%(а%)%)') then
         local name, item, lot, sum = text:match(
-        '(%w+_%w+) купил у вас (.+) %((%d+) шт%.%), вы получили $(%.+) от продажи %(комиссия %d* процент%(а%)%)')
+        '(%w+_%w+) купил у вас (.+) %((%d+) шт%.%), вы получили $(.+) от продажи %(комиссия %d* процент%(а%)%)')
         local text = 'Вы продали ' .. item .. '('..lot..' шт.) игроку ' .. name .. ', на сумму: $'..sum
         bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8(text) }
     end
