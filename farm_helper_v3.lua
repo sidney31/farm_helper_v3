@@ -243,15 +243,15 @@ function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
             end
             if line:find('Наличные деньги %(SA$%): %{......%}%[($%d+)%]') then
                 money = line:match('Наличные деньги %(SA$%): %{......%}%[($%d+)%]')
-                sNotif = sNotif .. '\nДеньги на руках: ' .. separator(money)
+                sNotif = sNotif .. '\nДеньги на руках: ' .. separator(money) .. 'SA$'
             end
             if line:find('Наличные деньги %(VC$%): %{......%}%[($%d+)%]') then
                 money = line:match('Наличные деньги %(VC$%): %{......%}%[($%d+)%]')
-                sNotif = sNotif .. '\nДеньги на руках: ' .. separator(money) .. ' SA$'
+                sNotif = sNotif .. '\nДеньги на руках: ' .. separator(money) .. ' VC$'
             end
             if line:find('Деньги в банке: %{......%}%[($%d+)%]') then
                 bank = line:match('Деньги в банке: %{......%}%[($%d+)%]')
-                sNotif = sNotif .. '\nДеньги в банке: ' .. separator(bank) .. ' VC$'
+                sNotif = sNotif .. '\nДеньги в банке: ' .. separator(bank)
             end
             if line:find('Деньги на депозите: %{......%}%[($%d+)%]') then
                 deposite = line:match('Деньги на депозите: %{......%}%[($%d+)%]')
