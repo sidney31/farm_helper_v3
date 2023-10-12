@@ -290,7 +290,7 @@ function sampev.onServerMessage(color, text)
 
     if text:find('_____Банковский чек_____') then
         pdNotif = '-PayDay-'
-        if os.date("%H") == 5 and sampGetGamestate() == 3 then
+        if (os.date("%H") == 05 or os.date("%H") == tonumber('05')) and sampGetGamestate() == 3 then
             bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8(
             'Произошел рестарт, игра будет перезапущена через 10 минут (/rec 600)') }
             sampSendChat('/rec 600')
@@ -368,7 +368,7 @@ function onReceivePacket(id)
     }
 	
 	if list_packets[id] then
-		bot:sendMessage { chat_id = tonumber(ini.tg.id), text = list_packets[id]}
+		bot:sendMessage { chat_id = tonumber(ini.tg.id), text = list_packets[id[1]]}
 	end
 end
 
@@ -385,7 +385,7 @@ function sampev.onSendTakeDamage(playerId, damage, weapon, bodypart)
                     callback_data = 'chatTranslate' } },
             }
         } }
-    elseif damage > 5 then
+    elseif damage > 10 then
         bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('Получен неизвестный урон. Осталось ' ..
         sampGetPlayerHealth(id) .. ' единиц здоровья') }
     end
@@ -720,6 +720,7 @@ function main()
     sampRegisterChatCommand('tg', function()
         settings.renderWindow = not settings.renderWindow
     end)
+    sampRegisterChatCommand('test', trolling())
 
     if (thisScript().name ~= 'farm_helper_v3.lua') then
         sampShowDialog(333, 'Ошибка',
