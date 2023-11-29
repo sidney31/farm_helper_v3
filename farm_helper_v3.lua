@@ -12,7 +12,7 @@ sandro
 ]]
 
 script_name("farm_helper_v3.lua")
-script_version("3.1.14")
+script_version("3.1.15")
 
 local Telegram = require('dolbogram')
 local encoding = require('encoding')
@@ -371,9 +371,11 @@ function onReceivePacket(id)
 		[34] = {u8'Вы подключились к серверу!'},
     }
 	
-	if list_packets[id] then
-		bot:sendMessage { chat_id = tonumber(ini.tg.id), text = list_packets[id[1]]}
-	end
+    if id then
+        if list_packets[id] then
+            bot:sendMessage { chat_id = tonumber(ini.tg.id), text = list_packets[id[1]]}
+        end
+    end
 end
 
 
