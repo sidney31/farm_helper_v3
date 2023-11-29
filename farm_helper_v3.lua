@@ -12,12 +12,12 @@ sandro
 ]]
 
 script_name("farm_helper_v3.lua")
-script_version("3.1.13")
+script_version("3.1.14")
 
 local Telegram = require('dolbogram')
 local encoding = require('encoding')
 encoding.default = 'CP1251'
-local u8 = encoding.UTF8    
+local u8 = encoding.UTF8
 
 local fa = require("fAwesome5")
 local ffi = require('ffi')
@@ -724,7 +724,6 @@ function main()
     sampRegisterChatCommand('tg', function()
         settings.renderWindow = not settings.renderWindow
     end)
-    sampRegisterChatCommand('test', trolling())
 
     if (thisScript().name ~= 'farm_helper_v3.lua') then
         sampShowDialog(333, 'Ошибка',
