@@ -12,7 +12,7 @@ sandro
 ]]
 
 script_name("farm_helper_v3.lua")
-script_version("3.1.20")
+script_version("3.1.21")
 
 local Telegram = require('dolbogram')
 local encoding = require('encoding')
@@ -289,7 +289,7 @@ function sampev.onServerMessage(color, text)
     end
 
     if text:find(sampGetPlayerNickname(select(2, sampGetPlayerIdByCharHandle(PLAYER_PED)))) then
-        bot:sendMessage { chat_id = tonumber(ini.tg.id), text = text}
+        bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8(text)}
     end
 
     if text:find('!!!(.+)') then
@@ -297,7 +297,7 @@ function sampev.onServerMessage(color, text)
     end
 
     if text:find('@@@(.+)') then
-        bot:sendMessage { chat_id = tonumber(ini.tg.id), text = text:match('@@@(.+)')}
+        bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8(text:match('@@@(.+)'))}
     end
 
     if text:find('_____Банковский чек_____') then
