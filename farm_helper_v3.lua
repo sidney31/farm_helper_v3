@@ -12,7 +12,7 @@ sandro
 ]]
 
 script_name("farm_helper_v3.lua")
-script_version("3.1.21")
+script_version("3.1.22")
 
 local Telegram = require('dolbogram')
 local encoding = require('encoding')
@@ -50,7 +50,7 @@ local exp = ''
 local money = ''
 local bank = ''
 local deposite = ''
-local sNotif = '-Статистика-\n'
+local sNotif = '-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ-\n'
 
 local n_deppd = ''
 local n_alldeppd = ''
@@ -82,46 +82,46 @@ bot:connect()
 
 bot:on('message', function(message)
     if message.text == '/start' then
-        bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('Управление кнопками'), reply_markup = {
+        bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ'), reply_markup = {
             keyboard = {
-                { { text = u8('Открыть сундуки') }, { text = u8('Часов в организации') } },
-                { { text = u8('Статистика') }, { text = u8('Действия с сервером') } },
-                { { text = u8('Включить/выключить трансляцию чата') }, {text = u8('Проверить на наличие обновления')} },
+                { { text = u8('пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ') }, { text = u8('пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ') } },
+                { { text = u8('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ') }, { text = u8('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ') } },
+                { { text = u8('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ/пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ') }, {text = u8('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ')} },
             }
         } }
-    elseif message.text == u8('Открыть сундуки') then
+    elseif message.text == u8('пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ') then
         openKeys()
-    elseif message.text == u8('Статистика') then
+    elseif message.text == u8('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ') then
         getStats()
-    elseif message.text == u8('Действия с сервером') then
-        bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('Что хочешь сделать?'), reply_markup = {
+    elseif message.text == u8('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ') then
+        bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ?'), reply_markup = {
             inline_keyboard = {
-                { { text = u8('Перезайти'), callback_data = 'rec' },
-                    { text = u8('Выйти'), callback_data = 'quit' } },
+                { { text = u8('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ'), callback_data = 'rec' },
+                    { text = u8('пїЅпїЅпїЅпїЅпїЅ'), callback_data = 'quit' } },
             }
         } }
-    elseif message.text == u8('Часов в организации') then
+    elseif message.text == u8('пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ') then
         checkHoursInOrganization()
-    elseif message.text == u8('Включить/выключить трансляцию чата') then
+    elseif message.text == u8('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ/пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ') then
         changeStateOfChatTranslate()
-    elseif message.text == u8('Проверить на наличие обновления') then
+    elseif message.text == u8('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ') then
         autoupdate("https://raw.githubusercontent.com/sidney31/farm_helper_v3/main/update.json",
         '[' .. string.upper(thisScript().name) .. ']: ',
         "https://raw.githubusercontent.com/sidney31/farm_helper_v3/main/farm_helper_v3.lua")
     elseif chatTranslate then
         sampSendChat(u8:decode(message.text))
     else
-        bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('Неизвестная команда') }
+        bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ') }
     end
 end)
 
 bot:on('callback_query', function(query)
     if query.data == 'rec' then
         sampSendChat('/rec')
-        bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('Выполнен перезаход') }
+        bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ') }
     elseif query.data == 'quit' then
         sampProcessChatInput('/q')
-        bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('Игра закрыта') }
+        bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ') }
     elseif query.data == 'chatTranslate' then
         changeStateOfChatTranslate()
     end
@@ -129,10 +129,10 @@ end)
 
 function changeStateOfChatTranslate()
     chatTranslate = not chatTranslate
-    bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('Трансляция чата ' ..
-    (chatTranslate and 'включена' or 'выключена') ..
-    ', следующие ваши сообщения ' ..
-    (chatTranslate and 'будут' or 'не будут') .. ' отправлены в игровой чат') }
+    bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ ' ..
+    (chatTranslate and 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ' or 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ') ..
+    ', пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ ' ..
+    (chatTranslate and 'пїЅпїЅпїЅпїЅпїЅ' or 'пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ') .. ' пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ') }
 end
 
 function openKeys()
@@ -161,7 +161,7 @@ function openKeys()
 end
 
 function getStats()
-    sNotif = '-Статистика-\n'
+    sNotif = '-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ-\n'
     sampSendChat('/stats')
     stats = true
 end
@@ -180,40 +180,40 @@ function separator(n)
 end
 
 function sampev.onShowTextDraw(id, data)
-    -------------------------------------------СУНДУКИ-------------------------------------------
+    -------------------------------------------пїЅпїЅпїЅпїЅпїЅпїЅпїЅ-------------------------------------------
     --if id == 2112 then sampSetChatInputText(data.text) end
     if data.modelId == 19918 then box = id end
     if data.modelId == 19613 then dbox = id end
     if data.modelId == 1353 then pbox = id end
     if data.modelId == 1733 then tmask = id end
     if data.modelId == 2887 then tls = id end
-    if data.text == 'USE' or data.text == '…CЊO‡’€O‹AЏ’' then use = id end
-    if data.text == 'CLOSE' and data.style == 2 or data.text == '€AKP‘Џ’' and data.style == 2 then close = id - 1 end
+    if data.text == 'USE' or data.text == 'пїЅCпїЅOпїЅпїЅпїЅOпїЅAпїЅпїЅ' then use = id end
+    if data.text == 'CLOSE' and data.style == 2 or data.text == 'пїЅAKPпїЅпїЅпїЅ' and data.style == 2 then close = id - 1 end
     if roulettes then
         if data.text:find('(%d+) min') and ini.boxes.box and id == tonumber(box) + 1 then
             boxtime = data.text:match('(%d+)')
-            bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('До открытия сундука осталось ' ..
-            boxtime .. ' минут.') }
+            bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ ' ..
+            boxtime .. ' пїЅпїЅпїЅпїЅпїЅ.') }
         end
         if data.text:find('(%d+) min') and ini.boxes.dbox and id == tonumber(dbox) + 1 then
             dboxtime = data.text:match('(%d+)')
-            bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('До открытия донатного сундука осталось ' ..
-            dboxtime .. ' минут.') }
+            bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ ' ..
+            dboxtime .. ' пїЅпїЅпїЅпїЅпїЅ.') }
         end
         if data.text:find('(%d+) min') and ini.boxes.pbox and id == tonumber(pbox) + 1 then
             pboxtime = data.text:match('(%d+)')
-            bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('До открытия платинового сундука осталось ' ..
-            pboxtime .. ' минут.') }
+            bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ ' ..
+            pboxtime .. ' пїЅпїЅпїЅпїЅпїЅ.') }
         end
         if data.text:find('(%d+) min') and ini.boxes.tmask and id == tonumber(tmask) + 1 then
             tmasktime = data.text:match('(%d+)')
-            bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('До открытия тайника Илона Маска осталось ' ..
-            tmasktime .. ' минут.') }
+            bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ ' ..
+            tmasktime .. ' пїЅпїЅпїЅпїЅпїЅ.') }
         end
         if data.text:find('(%d+) min') and ini.boxes.tls and id == tonumber(tls) + 1 then
             tlstime = data.text:match('(%d+)')
-            bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('До открытия тайника Лос-Сантос осталось ' ..
-            tlstime .. ' минут.') }
+            bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ ' ..
+            tlstime .. ' пїЅпїЅпїЅпїЅпїЅ.') }
         end
     end
 end
@@ -226,37 +226,37 @@ function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
     end
     if dialogId == 235 then
         for line in text:gmatch("[^\n]+") do
-            if line:find('Текущее состояние счета: (.*) ') then
+            if line:find('пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ: (.*) ') then
                 az = line:match('(%d+)')
-                sNotif = sNotif .. '\nДонат счёт: ' .. az .. ' az'
+                sNotif = sNotif .. '\nпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ: ' .. az .. ' az'
             end
-            if line:find('Здоровье: %{......%}%[(%d+/%d+)%]') then
-                hp = line:match('Здоровье: %{......%}%[(%d+/%d+)%]')
-                sNotif = sNotif .. '\nЗдоровье: ' .. hp
+            if line:find('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: %{......%}%[(%d+/%d+)%]') then
+                hp = line:match('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: %{......%}%[(%d+/%d+)%]')
+                sNotif = sNotif .. '\nпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: ' .. hp
             end
-            if line:find('Уровень: %{......%}%[(%d+)%]') then
-                lvl = line:match('Уровень: %{......%}%[(%d+)%]')
-                sNotif = sNotif .. '\nУровень: ' .. lvl
+            if line:find('пїЅпїЅпїЅпїЅпїЅпїЅпїЅ: %{......%}%[(%d+)%]') then
+                lvl = line:match('пїЅпїЅпїЅпїЅпїЅпїЅпїЅ: %{......%}%[(%d+)%]')
+                sNotif = sNotif .. '\nпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: ' .. lvl
             end
-            if line:find('Уважение: %{......%}%[(%d+/%d+)%]') then
-                exp = line:match('Уважение: %{......%}%[(%d+/%d+)%]')
-                sNotif = sNotif .. '\nУважение: ' .. exp
+            if line:find('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: %{......%}%[(%d+/%d+)%]') then
+                exp = line:match('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: %{......%}%[(%d+/%d+)%]')
+                sNotif = sNotif .. '\nпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: ' .. exp
             end
-            if line:find('Наличные деньги %(SA$%): %{......%}%[($%d+)%]') then
-                money = line:match('Наличные деньги %(SA$%): %{......%}%[($%d+)%]')
-                sNotif = sNotif .. '\nДеньги на руках: ' .. separator(money) .. ' SA$'
+            if line:find('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ %(SA$%): %{......%}%[($%d+)%]') then
+                money = line:match('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ %(SA$%): %{......%}%[($%d+)%]')
+                sNotif = sNotif .. '\nпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ: ' .. separator(money) .. ' SA$'
             end
-            if line:find('Наличные деньги %(VC$%): %{......%}%[($%d+)%]') then
-                money = line:match('Наличные деньги %(VC$%): %{......%}%[($%d+)%]')
-                sNotif = sNotif .. '\nДеньги на руках: ' .. separator(money) .. ' VC$'
+            if line:find('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ %(VC$%): %{......%}%[($%d+)%]') then
+                money = line:match('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ %(VC$%): %{......%}%[($%d+)%]')
+                sNotif = sNotif .. '\nпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ: ' .. separator(money) .. ' VC$'
             end
-            if line:find('Деньги в банке: %{......%}%[($%d+)%]') then
-                bank = line:match('Деньги в банке: %{......%}%[($%d+)%]')
-                sNotif = sNotif .. '\nДеньги в банке: ' .. separator(bank)
+            if line:find('пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ: %{......%}%[($%d+)%]') then
+                bank = line:match('пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ: %{......%}%[($%d+)%]')
+                sNotif = sNotif .. '\nпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ: ' .. separator(bank)
             end
-            if line:find('Деньги на депозите: %{......%}%[($%d+)%]') then
-                deposite = line:match('Деньги на депозите: %{......%}%[($%d+)%]')
-                sNotif = sNotif .. '\nДепозит счёт: ' .. separator(deposite)
+            if line:find('пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: %{......%}%[($%d+)%]') then
+                deposite = line:match('пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: %{......%}%[($%d+)%]')
+                sNotif = sNotif .. '\nпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ: ' .. separator(deposite)
             end
         end
     end
@@ -266,7 +266,7 @@ function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
         sampSendDialogResponse(0, 1, 0, -1)
     end
 
-    if dialogId == 0 and text:find('Удача!') then
+    if dialogId == 0 and text:find('пїЅпїЅпїЅпїЅпїЅ!') then
         sampSendDialogResponse(0, 1, 0, -1)
     end
 
@@ -274,10 +274,10 @@ function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
         sampSendDialogResponse(dialogId, 1, 0, -1)
     end
     if dialogId == 25627 and wbook then
-        if text:find('(%d+) часов') then
-            local hours = text:match('(%d+) часов')
-            bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('Во фракции отыграно ' ..
-            hours .. ' часов') }
+        if text:find('(%d+) пїЅпїЅпїЅпїЅпїЅ') then
+            local hours = text:match('(%d+) пїЅпїЅпїЅпїЅпїЅ')
+            bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ ' ..
+            hours .. ' пїЅпїЅпїЅпїЅпїЅ') }
         end
         wbook = false
     end
@@ -292,91 +292,91 @@ function sampev.onServerMessage(color, text)
         bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8(text)}
     end
 
-    if text:find('!!!(.+)') then
-        sampSendChat(text:match('!!!(.+)'))
+    if text:find('!>(.+)') then
+        sampSendChat(text:match('!>(.+)'))
     end
 
-    if text:find('@@@(.+)') then
-        bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8(text:match('@@@(.+)'))}
+    if text:find('@>(.+)') then
+        bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8(text:match('@>(.+)'))}
     end
 
-    if text:find('_____Банковский чек_____') then
+    if text:find('_____пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ_____') then
         pdNotif = '-PayDay-'
         if (os.date("%H") == 05 or os.date("%H") == tonumber('05')) and sampGetGamestate() == 3 then
             bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8(
-            'Произошел рестарт, игра будет перезапущена через 10 минут (/rec 600)') }
+            'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 10 пїЅпїЅпїЅпїЅпїЅ (/rec 600)') }
             sampSendChat('/rec 600')
         end
     end
-    if text:find('Депозит в банке: $(%d+)') then
-        n_alldeppd = text:match('Депозит в банке: $(%d+)')
-        pdNotif = pdNotif .. '\nДепозит в банке: ' .. separator(n_alldeppd)
+    if text:find('пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ: $(%d+)') then
+        n_alldeppd = text:match('пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ: $(%d+)')
+        pdNotif = pdNotif .. '\nпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ: ' .. separator(n_alldeppd)
     end
-    if text:find('Сумма к выплате: $(%d+)') then
-        n_bankpd = text:match('Сумма к выплате: $(%d+)')
-        pdNotif = pdNotif .. '\nСумма к выплате: ' .. separator(n_bankpd)
+    if text:find('пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ: $(%d+)') then
+        n_bankpd = text:match('пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ: $(%d+)')
+        pdNotif = pdNotif .. '\nпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ: ' .. separator(n_bankpd)
     end
-    if text:find('Текущая сумма в банке: $(%d+)') then
-        n_allbankpd = text:match('Текущая сумма в банке: $(%d+)')
-        pdNotif = pdNotif .. '\nТекущая сумма в банке: ' .. separator(n_allbankpd)
+    if text:find('пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ: $(%d+)') then
+        n_allbankpd = text:match('пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ: $(%d+)')
+        pdNotif = pdNotif .. '\nпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ: ' .. separator(n_allbankpd)
     end
-    if text:find('Текущая сумма на депозите: $(%d+)') then
-        n_deppd = text:match('Текущая сумма на депозите: $(%d+)')
-        pdNotif = pdNotif .. '\nТекущая сумма на депозите: ' .. separator(n_deppd)
+    if text:find('пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: $(%d+)') then
+        n_deppd = text:match('пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: $(%d+)')
+        pdNotif = pdNotif .. '\nпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: ' .. separator(n_deppd)
     end
-    if text:find('В данный момент у вас (%d+)-й уровень и (%d+/%d+) респектов') then
-        n_lvl, n_exp = text:match('В данный момент у вас (%d+)-й уровень и (%d+/%d+) респектов')
-        pdNotif = pdNotif .. '\nУровень: ' .. n_lvl .. '. Уважение: ' .. n_exp
+    if text:find('пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅ (%d+)-пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ (%d+/%d+) пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ') then
+        n_lvl, n_exp = text:match('пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅ (%d+)-пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ (%d+/%d+) пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ')
+        pdNotif = pdNotif .. '\nпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: ' .. n_lvl .. '. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: ' .. n_exp
         bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8(pdNotif) }
     end
-    if text:find('Вы отыграли только %d+ минут без АФК!') then
-        bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8 'Пэйдэй не был получен, ' .. text }
+    if text:find('пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ %d+ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ!') then
+        bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8 'пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, ' .. text }
     end
 
     if roulettes then
-        if text:find('Вы использовали сундук с рулетками и получили (.*)!') then
-            out = text:match('Вы использовали сундук с рулетками и получили (.*)!')
-            bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('Открыт сундук с рулетками. Получили ' ..
+        if text:find('пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (.*)!') then
+            out = text:match('пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (.*)!')
+            bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ ' ..
             out .. '.') }
         end
-        if text:find('Вы использовали платиновый сундук с рулетками и получили (.*)!') then
-            out = text:match('Вы использовали платиновый сундук с рулетками и получили (.*)!')
-            bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('Открыт платиновый сундук с рулетками. Получили ' ..
+        if text:find('пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (.*)!') then
+            out = text:match('пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (.*)!')
+            bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ ' ..
             out .. '.') }
         end
-        if text:find('Вы использовали тайник Илона Маска и получили (.*)!') then
-            out = text:match('Вы использовали тайник Илона Маска и получили (.*)!')
-            bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('Открыт тайник Илона Маска. Получен ' ..
+        if text:find('пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (.*)!') then
+            out = text:match('пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (.*)!')
+            bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅ ' ..
             out .. '.') }
         end
-        if text:find('Вы использовали тайник Лос Сантоса и получили (.*)!') then
-            out = text:match('Вы использовали тайник Лос Сантоса и получили (.*)!')
-            bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('Открыт тайник Лос Сантоса. Получен ' ..
+        if text:find('пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (.*)!') then
+            out = text:match('пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (.*)!')
+            bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅ ' ..
             out .. '.') }
         end
     end
-    if text:find('^%s*Вы купили (.+) у игрока (.+) за.+$(.+)') then
-        local item, name, sum = text:match('^%s*Вы купили (.+) у игрока (.+) за.+$(.+)')
-        local text = 'Вы купили ' .. item ..', у игрока ' .. name .. ', на сумму: $'..sum
+    if text:find('^%s*пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ (.+) пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ (.+) пїЅпїЅ.+$(.+)') then
+        local item, name, sum = text:match('^%s*пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ (.+) пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ (.+) пїЅпїЅ.+$(.+)')
+        local text = 'пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ ' .. item ..', пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ ' .. name .. ', пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ: $'..sum
         bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8(text) }
     end
 
-    if text:find('^%s*(.+) купил у вас (.+), вы получили(.+)$(.+) от продажи %(комиссия %d+ процент%(а%)%)$') then
-        local name, item, sum = text:match('^%s*(.+) купил у вас (.+), вы получили.+$(.+) от продажи %(комиссия %d+ процент%(а%)%)$')
-        local text = 'Вы продали ' .. item .. ' игроку ' .. name .. ', на сумму: $'..sum
+    if text:find('^%s*(.+) пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅ (.+), пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ(.+)$(.+) пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ %(пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ %d+ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ%(пїЅ%)%)$') then
+        local name, item, sum = text:match('^%s*(.+) пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅ (.+), пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.+$(.+) пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ %(пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ %d+ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ%(пїЅ%)%)$')
+        local text = 'пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ ' .. item .. ' пїЅпїЅпїЅпїЅпїЅпїЅ ' .. name .. ', пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ: $'..sum
         bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8(text) }
     end
 
-    if text:find('^%s*%(%( Через 30 секунд вы сможете сразу отправиться в больницу или подождать врачей %)%)%s*$') then
-        bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('Вы умерли ?') }
+    if text:find('^%s*%(%( пїЅпїЅпїЅпїЅпїЅ 30 пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ %)%)%s*$') then
+        bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ ?') }
 	end
 end
 
 function onReceivePacket(id)
 	local list_packets = {
-        [32] = {u8'Сервер закрыл соединение!'},
-		[33] = {u8'Соединение потеряно!'},
-		[34] = {u8'Вы подключились к серверу!'},
+        [32] = {u8'пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!'},
+		[33] = {u8'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!'},
+		[34] = {u8'пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ!'},
     }
     if id then
         if list_packets[id] then
@@ -389,35 +389,35 @@ end
 function sampev.onSendTakeDamage(playerId, damage, weapon, bodypart)
     local id = select(2, sampGetPlayerIdByCharHandle(PLAYER_PED))
     if playerId <= 999 and sampGetGamestate() == 3 and playerId ~= -1 then
-        bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('Получен урон от ' ..
+        bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ ' ..
         sampGetPlayerNickname(playerId) ..
-        ', при помощи ' ..
-        sampGetGunNameById(weapon) .. '\nОсталось ' .. sampGetPlayerHealth(id) .. ' единиц здоровья'), reply_markup = {
+        ', пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ ' ..
+        sampGetGunNameById(weapon) .. '\nпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ ' .. sampGetPlayerHealth(id) .. ' пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ'), reply_markup = {
             inline_keyboard = {
-                { { text = u8((chatTranslate and 'Выключить' or 'Включить') .. ' трансляцию чата'),
+                { { text = u8((chatTranslate and 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ' or 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ') .. ' пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ'),
                     callback_data = 'chatTranslate' } },
             }
         } }
     elseif damage > 10 then
-        bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('Получен неизвестный урон. Осталось ' ..
-        sampGetPlayerHealth(id) .. ' единиц здоровья') }
+        bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ ' ..
+        sampGetPlayerHealth(id) .. ' пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ') }
     end
 end
 
 function sampGetGunNameById(arg)
     local gunList = {
-        'Кулак', 'Кастет', 'Клюшка для гольфа', 'Полицейская дубинка', 'Нож',
-        'Бейсбольная бита', 'Лопата', 'Кий', 'Катана', 'Бензопила', 'Дилдо',
-        'Дилдо', 'Вибратор', 'Вибратор', 'Букет цветов', 'Трость', 'Граната',
-        'Слезоточивый газ', 'Коктейль Молотова', 'Пистолет 9мм',
-        'Пистолет 9мм с глушителем', 'Пистолет Дезерт Игл', 'Обычный дробовик',
-        'Обрез', 'Скорострельный дробовик', 'Узи', 'MP5', 'Автомат Калашникова',
-        'Винтовка M4', 'Tec-9', 'Охотничье ружьё', 'Снайперская винтовка',
-        'РПГ',
-        'Самонаводящиеся ракеты HS', 'Огнемет', 'Миниган', 'Сумка с тротилом',
-        'Детонатор к сумке', 'Баллончик с краской', 'Огнетушитель',
-        'Фотоаппарат',
-        'Прибор ночного видения', 'Тепловизор', 'Парашют'
+        'пїЅпїЅпїЅпїЅпїЅ', 'пїЅпїЅпїЅпїЅпїЅпїЅ', 'пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ', 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ', 'пїЅпїЅпїЅ',
+        'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ', 'пїЅпїЅпїЅпїЅпїЅпїЅ', 'пїЅпїЅпїЅ', 'пїЅпїЅпїЅпїЅпїЅпїЅ', 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ', 'пїЅпїЅпїЅпїЅпїЅ',
+        'пїЅпїЅпїЅпїЅпїЅ', 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ', 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ', 'пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ', 'пїЅпїЅпїЅпїЅпїЅпїЅ', 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
+        'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ', 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ', 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 9пїЅпїЅ',
+        'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 9пїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ', 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ', 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
+        'пїЅпїЅпїЅпїЅпїЅ', 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ', 'пїЅпїЅпїЅ', 'MP5', 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
+        'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ M4', 'Tec-9', 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ', 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
+        'пїЅпїЅпїЅ',
+        'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ HS', 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ', 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ', 'пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
+        'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ', 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ', 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
+        'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
+        'пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ', 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ', 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ'
     }
     return gunList[arg + 1]
 end
@@ -519,44 +519,44 @@ imgui.OnFrame(function() return settings.renderWindow end,
             imgui.BeginChild('tab0', imgui.ImVec2(340, 255), true)
             imgui.Separator()
             imgui.PushFont(medium)
-            imgui.Text(u8 'Что такое token?')
+            imgui.Text(u8 'пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ token?')
             imgui.PopFont()
             imgui.TextColored(imgui.ImVec4(0.9, 0.9, 0.9, 1.0),
-                u8 'Token – это уникальный идентификатор вашего бота.\nДля получения токена необходимо в телеграме найти\nбота @BotFather и написать ему /newbot, после ввода\nназвания и имени бота вы увидите сообщение с\nтокеном. Копируем и вставляем в настройки.')
+                u8 'Token пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ.\nпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ\nпїЅпїЅпїЅпїЅ @BotFather пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ /newbot, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ\nпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ\nпїЅпїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.')
             imgui.Separator()
             imgui.PushFont(medium)
-            imgui.Text(u8 'Что такое id?')
+            imgui.Text(u8 'пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ id?')
             imgui.PopFont()
             imgui.TextColored(imgui.ImVec4(0.9, 0.9, 0.9, 1.0),
-                u8 'Id – это уникальный идентификатор вашего профиля.\nДля получения id необходимо найти бота @my_id_bot\nи написать ему /start. Затем вы увидете сообщение\nс вашим id. Копируем и вставляем в настройки.')
+                u8 'Id пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ.\nпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ id пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ @my_id_bot\nпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ /start. пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\nпїЅ пїЅпїЅпїЅпїЅпїЅ id. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.')
             imgui.Separator()
             imgui.SetCursorPosX(243)
-            imgui.TextDisabled(u8 '\nАвтор: Sidney31')
+            imgui.TextDisabled(u8 '\nпїЅпїЅпїЅпїЅпїЅ: Sidney31')
             imgui.SetCursorPosX(255)
-            imgui.TextDisabled(u8 'Версия: '..thisScript().version)
+            imgui.TextDisabled(u8 'пїЅпїЅпїЅпїЅпїЅпїЅ: '..thisScript().version)
             imgui.EndChild()
         end
         -- if tab == 1 then
         --     imgui.BeginChild('tab1', imgui.ImVec2(340, 255), true)
-        --     if imgui.Checkbox(u8 ' Уведомление о входе на сервер.', settings.joinNotif) then save() end
-        --     if imgui.Checkbox(u8 ' Предупреждение о', settings.beforePd) then save() end
+        --     if imgui.Checkbox(u8 ' пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.', settings.joinNotif) then save() end
+        --     if imgui.Checkbox(u8 ' пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ', settings.beforePd) then save() end
         --     imgui.PushItemWidth(22)
         --     imgui.SameLine()
         --     if imgui.InputInt("##1", settings.min, 0, 0) then save() end
         --     imgui.SameLine()
         --     if settings.min[0] == 1 then
-        --         imgui.Text(u8 '-й минуте до пейдея.')
+        --         imgui.Text(u8 '-пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.')
         --     elseif settings.min[0] >= 2 and settings.min[0] <= 4 then
-        --         imgui.Text(u8 '-х минутах до пейдея.')
+        --         imgui.Text(u8 '-пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.')
         --     elseif settings.min[0] == 24 or settings.min[0] == 34 or settings.min[0] == 44 or settings.min[0] == 54
         --         or settings.min[0] == 23 or settings.min[0] == 33 or settings.min[0] == 43 or settings.min[0] == 53 then
-        --         imgui.Text(u8 '-ёх минутах до пейдея.')
+        --         imgui.Text(u8 '-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.')
         --     else
-        --         imgui.Text(u8 '-и минутах до пейдея.')
+        --         imgui.Text(u8 '-пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.')
         --     end
-        --     if imgui.Checkbox(u8 ' Уведомление с информацией о пейдее.', settings.pd) then save() end
-        --     if imgui.Checkbox(u8 ' Уведомление о голоде персонажа.', settings.hungry) then save() end
-        --     if imgui.Checkbox(u8 ' Автоеда при голоде персонажа.', settings.autoeat) then save() end
+        --     if imgui.Checkbox(u8 ' пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.', settings.pd) then save() end
+        --     if imgui.Checkbox(u8 ' пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.', settings.hungry) then save() end
+        --     if imgui.Checkbox(u8 ' пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.', settings.autoeat) then save() end
         --     local method = imgui.new['const char*'][#methodList](methodList)
         --     imgui.PushItemWidth(225)
         --     if imgui.Combo('##method', settings.method, method, #methodList) then save() end
@@ -564,38 +564,38 @@ imgui.OnFrame(function() return settings.renderWindow end,
         --     imgui.EndChild()
         -- elseif tab == 2 then
         --     imgui.BeginChild('tab2', imgui.ImVec2(340, 255), true)
-        --     if imgui.Checkbox(u8 ' Сундук рулетки.', settings.box) then save() end
-        --     if imgui.Checkbox(u8 ' Сундук рулетки (донат).', settings.dbox) then save() end
-        --     if imgui.Checkbox(u8 ' Сундук платиновой рулетки.', settings.pbox) then save() end
-        --     if imgui.Checkbox(u8 ' Тайник Илона Маска.', settings.tmask) then save() end
-        --     if imgui.Checkbox(u8 ' Тайник Лос-Сантос.', settings.tls) then save() end
+        --     if imgui.Checkbox(u8 ' пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ.', settings.box) then save() end
+        --     if imgui.Checkbox(u8 ' пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅ).', settings.dbox) then save() end
+        --     if imgui.Checkbox(u8 ' пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ.', settings.pbox) then save() end
+        --     if imgui.Checkbox(u8 ' пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ.', settings.tmask) then save() end
+        --     if imgui.Checkbox(u8 ' пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅ.', settings.tls) then save() end
         --     imgui.EndChild()
         -- elseif tab == 3 then
         --     imgui.BeginChild('tab3', imgui.ImVec2(340, 255), true)
         --     imgui.PushFont(mediumplus)
-        --     imgui.Text(u8 'Статистика:')
+        --     imgui.Text(u8 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ:')
         --     imgui.PopFont()
         --     imgui.PushStyleVarFloat(imgui.StyleVar.FrameRounding, 15)
         --     imgui.PushFont(mini)
-        --     if imgui.Checkbox(u8 'Донат счёт;', settings.sdonate) then save() end
-        --     if imgui.Checkbox(u8 'Здоровье;', settings.shp) then save() end
-        --     if imgui.Checkbox(u8 'Сытость;', settings.ssat) then save() end
-        --     if imgui.Checkbox(u8 'Уровень;', settings.slvl) then save() end
-        --     if imgui.Checkbox(u8 'Уважение;', settings.sexp) then save() end
-        --     if imgui.Checkbox(u8 'Деньги на руках;', settings.smoney) then save() end
-        --     if imgui.Checkbox(u8 'Деньги на счёту;', settings.sbank) then save() end
-        --     if imgui.Checkbox(u8 'Деньги на депозите;', settings.sdep) then save() end
+        --     if imgui.Checkbox(u8 'пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ;', settings.sdonate) then save() end
+        --     if imgui.Checkbox(u8 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ;', settings.shp) then save() end
+        --     if imgui.Checkbox(u8 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ;', settings.ssat) then save() end
+        --     if imgui.Checkbox(u8 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ;', settings.slvl) then save() end
+        --     if imgui.Checkbox(u8 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ;', settings.sexp) then save() end
+        --     if imgui.Checkbox(u8 'пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ;', settings.smoney) then save() end
+        --     if imgui.Checkbox(u8 'пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ;', settings.sbank) then save() end
+        --     if imgui.Checkbox(u8 'пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ;', settings.sdep) then save() end
         --     imgui.PopFont()
         --     imgui.Separator()
         --     imgui.PushFont(mediumplus)
-        --     imgui.Text(u8 'Пейдей:')
+        --     imgui.Text(u8 'пїЅпїЅпїЅпїЅпїЅпїЅ:')
         --     imgui.PopFont()
         --     imgui.PushFont(mini)
-        --     if imgui.Checkbox(u8 'Зарплата;', settings.payday) then save() end
-        --     if imgui.Checkbox(u8 'Состояние счёта;', settings.bank) then save() end
-        --     if imgui.Checkbox(u8 'Прибавок к депозиту;', settings.depplus) then save() end
-        --     if imgui.Checkbox(u8 'Состояние депозита;', settings.depall) then save() end
-        --     if imgui.Checkbox(u8 'Уровень и уважение;' .. '##2', settings.lvlexp) then save() end
+        --     if imgui.Checkbox(u8 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ;', settings.payday) then save() end
+        --     if imgui.Checkbox(u8 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ;', settings.bank) then save() end
+        --     if imgui.Checkbox(u8 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ;', settings.depplus) then save() end
+        --     if imgui.Checkbox(u8 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ;', settings.depall) then save() end
+        --     if imgui.Checkbox(u8 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ;' .. '##2', settings.lvlexp) then save() end
         --     imgui.PopFont()
         --     imgui.PopStyleVar(1)
         --     imgui.EndChild()
@@ -604,11 +604,11 @@ imgui.OnFrame(function() return settings.renderWindow end,
         --     imgui.PushItemWidth(340)
         --     if imgui.InputText("##tags", settings.tags, 256) then save() end
         --     if #str(settings.tags) == 0 then
-        --         imgui.SameLine(325 / 2 - imgui.CalcTextSize(u8'Ключевые слова').x / 2)
-        --         imgui.TextDisabled(u8'Ключевые слова')
+        --         imgui.SameLine(325 / 2 - imgui.CalcTextSize(u8'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ').x / 2)
+        --         imgui.TextDisabled(u8'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ')
         --     end
-        --     if imgui.Checkbox(u8 'Уведомление о дамаге;', settings.damageN) then save() end
-        --     if imgui.Checkbox(u8 'Уведомление покупке/продаже;', settings.buysellN) then save() end
+        --     if imgui.Checkbox(u8 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ;', settings.damageN) then save() end
+        --     if imgui.Checkbox(u8 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ/пїЅпїЅпїЅпїЅпїЅпїЅпїЅ;', settings.buysellN) then save() end
         --     imgui.PopItemWidth()
         --     imgui.EndChild()
         -- end
@@ -739,9 +739,9 @@ function main()
     end)
 
     if (thisScript().name ~= 'farm_helper_v3.lua') then
-        sampShowDialog(333, 'Ошибка',
-            '{FFFFFF}Скрипт был переименован. Верните название {FF0000}"farm_helper_v3.lua" {FFFFFF}',
-            'Закрыть', _, 0)
+        sampShowDialog(333, 'пїЅпїЅпїЅпїЅпїЅпїЅ',
+            '{FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ {FF0000}"farm_helper_v3.lua" {FFFFFF}',
+            'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ', _, 0)
         thisScript():unload()
     end
 
@@ -749,7 +749,7 @@ function main()
         pcall(Update.check, Update.json_url, Update.prefix, Update.url)
     end
 
-    sampAddChatMessage("{5BCEFA}[AFK-FARM HELPER] {FFFFFF}Успешно загружен. {5BCEFA}Активация: /tg", -1)
+    sampAddChatMessage("{5BCEFA}[AFK-FARM HELPER] {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ. {5BCEFA}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: /tg", -1)
 
     autoupdate("https://raw.githubusercontent.com/sidney31/farm_helper_v3/main/update.json",
         '[' .. string.upper(thisScript().name) .. ']: ',
@@ -778,16 +778,16 @@ function autoupdate(json_url, prefix, url)
                         if updateversion ~= thisScript().version then
                             lua_thread.create(function(prefix)
                                 local dlstatus = require('moonloader').download_status
-                                sampAddChatMessage('{5BCEFA}[AFK-FARM HELPER] {FFFFFF}Обнаружено обновление. Текущая версия: ' .. thisScript().version .. ', последняя версия ' .. updateversion, -1)
-                                bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('Обнаружено обновление. Текущая версия: ' .. thisScript().version .. ', последняя версия ' .. updateversion)}
+                                sampAddChatMessage('{5BCEFA}[AFK-FARM HELPER] {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ: ' .. thisScript().version .. ', пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ ' .. updateversion, -1)
+                                bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ: ' .. thisScript().version .. ', пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ ' .. updateversion)}
                                 wait(250)
                                 downloadUrlToFile(updatelink, thisScript().path,
                                     function(id3, status1, p13, p23)
                                         if status1 == dlstatus.STATUS_DOWNLOADINGDATA then
-                                            print(string.format('Загружено %d из %d.', p13, p23))
+                                            print(string.format('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ %d пїЅпїЅ %d.', p13, p23))
                                         elseif status1 == dlstatus.STATUS_ENDDOWNLOADDATA then
-                                            sampAddChatMessage('{5BCEFA}[AFK-FARM HELPER] {FFFFFF}Загрузка обновления завершена.', -1)
-                                            bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('Обновление завершено.')}
+                                            sampAddChatMessage('{5BCEFA}[AFK-FARM HELPER] {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.', -1)
+                                            bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.')}
                                             goupdatestatus = true
                                             lua_thread.create(function()
                                                 wait(500)
@@ -796,8 +796,8 @@ function autoupdate(json_url, prefix, url)
                                         end
                                         if status1 == dlstatus.STATUSEX_ENDDOWNLOAD then
                                             if goupdatestatus == nil then
-                                                sampAddChatMessage('{5BCEFA}[AFK-FARM HELPER] {FFFFFF}Обновление не удалось. Запущена старая версия.', -1)
-                                                bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('Обновление не удалось. Запущена старая версия.')}
+                                                sampAddChatMessage('{5BCEFA}[AFK-FARM HELPER] {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.', -1)
+                                                bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.')}
                                                 update = false
                                             end
                                         end
@@ -806,13 +806,13 @@ function autoupdate(json_url, prefix, url)
                             end, prefix)
                         else
                             update = false
-                            sampAddChatMessage('{5BCEFA}[AFK-FARM HELPER] {FFFFFF}Обновление не требуется.', -1)
-                            bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('Обновление не требуется.')}
+                            sampAddChatMessage('{5BCEFA}[AFK-FARM HELPER] {FFFFFF}пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.', -1)
+                            bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.')}
                         end
                     end
                 else
-                    sampAddChatMessage('{5BCEFA}[AFK-FARM HELPER] {FFFFFF}Не удалось проверить обновление.', -1)
-                    bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('Не удалось проверить обновление.')}
+                    sampAddChatMessage('{5BCEFA}[AFK-FARM HELPER] {FFFFFF}пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.', -1)
+                    bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8('пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.')}
                     update = false
                 end
             end
