@@ -12,7 +12,7 @@ sandro
 ]]
 
 script_name("farm_helper_v3.lua")
-script_version("3.1.24")
+script_version("3.1.25")
 
 local Telegram = require('dolbogram')
 local encoding = require('encoding')
@@ -221,7 +221,7 @@ end
 
 function Flooder()
 	lua_thread.create(function()
-            sampProcessChatInput('[$] /vr АЗС 253 - минимально-низкие цены, удобное расположение! [$]')
+            sampProcessChatInput('/vr [$] АЗС 253 - минимально-низкие цены, удобное расположение! [$]')
             wait(180000)
 	end)
 end
