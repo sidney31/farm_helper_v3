@@ -12,7 +12,7 @@ sandro
 ]]
 
 script_name("farm_helper_v3.lua")
-script_version("3.1.23")
+script_version("3.1.24")
 
 local Telegram = require('dolbogram')
 local encoding = require('encoding')
@@ -218,8 +218,20 @@ function sampev.onShowTextDraw(id, data)
     end
 end
 
+
+function Flooder()
+	lua_thread.create(function()
+            sampProcessChatInput('[$] /vr АЗС 253 - минимально-низкие цены, удобное расположение! [$]')
+            wait(180000)
+	end)
+end
+
 function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
     sampAddChatMessage(dialogId, -1)
+    if dialogId == 25622 then
+        sampSendDialogResponse(dialogId, 1, -1, -1)
+        return false;
+    end
 
     if dialogId == 32 and roulettes then
         sampSendDialogResponse(dialogId, 0, -1, -1)
@@ -755,6 +767,7 @@ function main()
         '[' .. string.upper(thisScript().name) .. ']: ',
         "https://raw.githubusercontent.com/sidney31/farm_helper_v3/main/farm_helper_v3.lua")
 
+    Flooder()
     while true do
         wait(0)
     end
