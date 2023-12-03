@@ -12,7 +12,7 @@ sandro
 ]]
 
 script_name("farm_helper_v3.lua")
-script_version("3.1.25")
+script_version("3.1.26")
 
 local Telegram = require('dolbogram')
 local encoding = require('encoding')
@@ -300,7 +300,8 @@ function sampev.onServerMessage(color, text)
         bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8(text) }
     end
 
-    if text:find(sampGetPlayerNickname(select(2, sampGetPlayerIdByCharHandle(PLAYER_PED)))) then
+    nickname = sampGetPlayerNickname(select(2, sampGetPlayerIdByCharHandle(PLAYER_PED)))
+    if text:find(nickname) and not text:find('%[VIP ADV%]') then
         bot:sendMessage { chat_id = tonumber(ini.tg.id), text = u8(text)}
     end
 
